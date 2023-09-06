@@ -1,4 +1,7 @@
-# VoltageShift 
+# VoltageShift
+
+[![Build Status](https://github.com/asepms92/VoltageShift/workflows/CI/badge.svg?branch=master)](https://github.com/asepms92/VoltageShift/actions)
+
 Undervoltage Tools for MacOS (Haswell and Broadwell)<br />
 Change Turbo and Power Limit for most Intel platform Macbook
 All source code protected by      The GNU General Public License V 3.0   <br />
