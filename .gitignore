@@ -46,7 +46,9 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata/
+xcuserdata
+xcshareddata
+project.xcworkspace
 
 ## Other
 *.moved-aside
@@ -150,5 +152,7 @@ playground.xcworkspace
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
 # Carthage/Checkouts
 
+# Acidanthera SDK
+/MacKernelSDK
 
 # End of https://www.gitignore.io/api/swift,macos,Objective-C

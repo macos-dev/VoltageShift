@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>VoltageShift 1.23, copyright © 2019 SC Lee. All rights reserved.</string>
+	<string>${MODULE_VERSION}, Copyright © 2020 SC Lee. All rights reserved.</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,15 +17,17 @@
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>${MODULE_VERSION}</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>${MODULE_VERSION}</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>VoltageShiftAnVMSR</key>
 		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.sicreative.VoltageShift</string>
 			<key>IOClass</key>
 			<string>VoltageShiftAnVMSR</string>
 			<key>IOMatchCategory</key>
@@ -39,7 +41,7 @@
 		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2019 SC Lee. All rights reserved.</string>
+	<string>Copyright © 2020 SC Lee. All rights reserved.</string>
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.kpi.iokit</key>

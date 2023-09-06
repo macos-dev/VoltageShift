@@ -7,16 +7,12 @@
 #include <IOKit/IOUserClient.h>
 #include <IOKit/IOBufferMemoryDescriptor.h>
 
-
-
 // Added System wdmsr lib.
 #include <libkern/libkern.h>
 
 #if TARGET_CPU_X86_64
     #include <i386/proc_reg.h>
 #endif
-   
-
 
 #define BUFSIZE 	512 	//bytes
 #define MAXENTRIES	500
@@ -24,13 +20,15 @@
 
 #define kMethodObjectUserClient ((IOService*) 0 )
 
-enum {
+enum
+{
     AnVMSRActionMethodRDMSR = 0,
     AnVMSRActionMethodWRMSR = 1,
     AnVMSRNumMethods
 };
 
-typedef struct {
+typedef struct
+{
 	UInt32 action;
     UInt32 msr;
     UInt64 param;
@@ -41,6 +39,7 @@ class AnVMSRUserClient;
 class VoltageShiftAnVMSR : public IOService
 {
     OSDeclareDefaultStructors(VoltageShiftAnVMSR)
+
 public:
     virtual bool  init(OSDictionary *dictionary = 0);
 	virtual void free(void);
@@ -64,7 +63,7 @@ public:
 class AnVMSRUserClient : public IOUserClient
 {
 	OSDeclareDefaultStructors(AnVMSRUserClient);
-    
+
 private:
 	VoltageShiftAnVMSR *mDevice;
 
@@ -81,15 +80,15 @@ public:
 	virtual IOReturn clientClose();
 	virtual IOReturn clientDied();
     virtual bool set_Q_Size(UInt32 capacity);
-    
+
 	virtual bool willTerminate(IOService *provider, IOOptionBits options);
 	virtual bool didTerminate(IOService *provider, IOOptionBits options, bool *defer);
 	virtual bool terminate(IOOptionBits options = 0);
-    
+
 	virtual IOExternalMethod *getTargetAndMethodForIndex(IOService **targetP, UInt32 index);
-    
+
 	virtual IOReturn clientMemoryForType(UInt32 type, IOOptionBits *options, IOMemoryDescriptor **memory);
-    
+
     virtual IOReturn actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize);
     virtual IOReturn actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize);
 
