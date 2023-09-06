@@ -25,8 +25,8 @@ jobs:
       - name: CI Bootstrap
         run: |
           src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
-      - run: xcodebuild -scheme DisableTurboBoostBattery -derivedDataPath . -configuration Debug
-      - run: xcodebuild -scheme DisableTurboBoostBattery -derivedDataPath . -configuration Release
+      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Debug
+      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Release
 
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v2
