@@ -876,7 +876,7 @@ void unloadkext()
 
 void loadkext()
 {
-    sUnloadOnEnd = true;
+    isUnloadOnEnd = true;
 
     std::stringstream output;
     output << "sudo kextutil -q -r ./  -b "

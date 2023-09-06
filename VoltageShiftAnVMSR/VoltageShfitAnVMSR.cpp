@@ -1,4 +1,4 @@
-//This is modified version of AnVMSR for MSR acress
+// This is modified version of AnVMSR for MSR acress
 
 #include "VoltageShiftAnVMSR.h"
 
@@ -249,7 +249,7 @@ IOReturn AnVMSRUserClient::clientClose()
 
 	if (!isInactive())
 		terminate();
-    
+
 	return kIOReturnSuccess;
 }
 
