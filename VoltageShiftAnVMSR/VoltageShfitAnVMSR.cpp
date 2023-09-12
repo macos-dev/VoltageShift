@@ -41,6 +41,7 @@ bool VoltageShiftAnVMSR::start (IOService *provider)
 void VoltageShiftAnVMSR::stop (IOService *provider)
 {
     IOLog ("AnVMSR: Stopping...\n");
+
     super::stop (provider);
 }
 
@@ -68,7 +69,7 @@ IOReturn VoltageShiftAnVMSR::runAction(UInt32 action, UInt32 *outSize, void **ou
     IOLog("Action: %x", (unsigned int)action);
 #endif // DEBUG
 
-	return kIOReturnSuccess;
+    return kIOReturnSuccess;
 }
 
 IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID, UInt32 type, IOUserClient ** handler )
@@ -142,12 +143,12 @@ void VoltageShiftAnVMSR::closeChild(AnVMSRUserClient *ptr)
 #ifdef DEBUG
     IOLog("Closing: %p\n",ptr);
 
-    for(i=0;i<mClientCount;i++) {
+    for (i=0;i<mClientCount;i++) {
         IOLog("userclient ref: %d %p\n", i, mClientPtr[i]);
     }
 #endif // DEBUG
 
-    for(i=0;i<mClientCount;i++) {
+    for (i=0;i<mClientCount;i++) {
         if (mClientPtr[i] == ptr) {
             mClientCount--;
             mClientPtr[i] = NULL;
@@ -156,13 +157,14 @@ void VoltageShiftAnVMSR::closeChild(AnVMSRUserClient *ptr)
         }
     }
 
-    for(i=idx;i<mClientCount;i++) {
+    for (i=idx;i<mClientCount;i++) {
         mClientPtr[i] = mClientPtr[i+1];
     }
     mClientPtr[mClientCount+1] = NULL;
 }
 
 #undef super
+
 #define super IOUserClient
 
 OSDefineMetaClassAndStructors(AnVMSRUserClient, IOUserClient);
@@ -187,7 +189,7 @@ const AnVMSRUserClient *AnVMSRUserClient::withTask(task_t owningTask)
 bool AnVMSRUserClient::set_Q_Size(UInt32 capacity)
 {
     if (capacity == 0) {
-		return true;
+        return true;
     }
 
 #ifdef DEBUG
@@ -199,45 +201,45 @@ bool AnVMSRUserClient::set_Q_Size(UInt32 capacity)
 
 void AnVMSRUserClient::messageHandler(UInt32 type, const char *format, ...)
 {
-	va_list args;
-	va_start(args, format);
-	vprintf(format, args);
-	va_end(args);
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args);
+    va_end(args);
 }
 
 bool AnVMSRUserClient::initWithTask(task_t owningTask, void *securityID, UInt32 type,
                                        OSDictionary *properties)
 {
-	return super::initWithTask(owningTask, securityID, type, properties);
+    return super::initWithTask(owningTask, securityID, type, properties);
 }
 
 bool AnVMSRUserClient::start(IOService *provider)
 {
-	if (!super::start(provider))
-		return false;
+    if (!super::start(provider))
+        return false;
 
-	mDevice = OSDynamicCast(VoltageShiftAnVMSR, provider);
-	mDevice->retain();
+    mDevice = OSDynamicCast(VoltageShiftAnVMSR, provider);
+    mDevice->retain();
 
-	return true;
+    return true;
 }
 
 bool AnVMSRUserClient::willTerminate(IOService *provider, IOOptionBits options)
 {
-	return super::willTerminate(provider, options);
+    return super::willTerminate(provider, options);
 }
 
 bool AnVMSRUserClient::didTerminate(IOService *provider, IOOptionBits options, bool *defer)
 {
-	// if defer is true, stop will not be called on the user client
-	*defer = false;
+    // if defer is true, stop will not be called on the user client
+    *defer = false;
 
-	return super::didTerminate(provider, options, defer);
+    return super::didTerminate(provider, options, defer);
 }
 
 bool AnVMSRUserClient::terminate(IOOptionBits options)
 {
-	return super::terminate(options);
+    return super::terminate(options);
 }
 
 // clientClose is called when the user process calls IOServiceClose
@@ -247,44 +249,42 @@ IOReturn AnVMSRUserClient::clientClose()
         mDevice->closeChild(this);
     }
 
-	if (!isInactive())
-		terminate();
+    if (!isInactive())
+        terminate();
 
-	return kIOReturnSuccess;
+    return kIOReturnSuccess;
 }
 
 // clientDied is called when the user process terminates unexpectedly, the default implementation simply calls clientClose
 IOReturn AnVMSRUserClient::clientDied()
 {
-	return clientClose();
+    return clientClose();
 }
 
 void AnVMSRUserClient::free(void)
 {
-	mDevice->release();
+    mDevice->release();
 
-	super::free();
+    super::free();
 }
 
 // stop will be called during the termination process, and should free all resources associated with this client
 void AnVMSRUserClient::stop(IOService *provider)
 {
-	super::stop(provider);
+    super::stop(provider);
 }
 
 // getTargetAndMethodForIndex looks up the external methods - supply a description of the parameters, available to be called
 IOExternalMethod * AnVMSRUserClient::getTargetAndMethodForIndex(IOService **target, UInt32 index)
 {
-	static const IOExternalMethod methodDescs[3] = {
-		{ NULL, (IOMethod) &AnVMSRUserClient::actionMethodRDMSR, kIOUCStructIStructO,
-            kIOUCVariableStructureSize, kIOUCVariableStructureSize },
-		{ NULL, (IOMethod) &AnVMSRUserClient::actionMethodWRMSR, kIOUCStructIStructO,
-            kIOUCVariableStructureSize, kIOUCVariableStructureSize },
-	};
+    static const IOExternalMethod methodDescs[3] = {
+        { NULL, (IOMethod) &AnVMSRUserClient::actionMethodRDMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize },
+        { NULL, (IOMethod) &AnVMSRUserClient::actionMethodWRMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize },
+    };
 
-	*target = this;
-	if (index < 3)
-		return (IOExternalMethod *) (methodDescs + index);
+    *target = this;
+    if (index < 3)
+        return (IOExternalMethod *) (methodDescs + index);
 
     return NULL;
 }
@@ -302,7 +302,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
     if (!dataIn) {
         return kIOReturnUnsupported;
     }
-	msrdata->param = mDevice->a_rdmsr(msrdata->msr);
+    msrdata->param = mDevice->a_rdmsr(msrdata->msr);
 
 #ifdef DEBUG
     IOLog("AnVMSR: RDMSR %X : 0x%llX\n", msrdata->msr, msrdata->param);
@@ -329,7 +329,7 @@ IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IO
         return kIOReturnUnsupported;
     }
 
-	mDevice->a_wrmsr(msrdata->msr, msrdata->param);
+    mDevice->a_wrmsr(msrdata->msr, msrdata->param);
 
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR: WRMSR 0x%llX to %X\n", msrdata->param, msrdata->msr);
@@ -341,11 +341,11 @@ IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IO
 IOReturn AnVMSRUserClient::clientMemoryForType(UInt32 type, IOOptionBits *options,
                                                   IOMemoryDescriptor **memory)
 {
-	IOBufferMemoryDescriptor *memDesc;
-	char *msgBuffer;
+    IOBufferMemoryDescriptor *memDesc;
+    char *msgBuffer;
 
     *options = 0;
-	*memory = NULL;
+    *memory = NULL;
 
     memDesc = IOBufferMemoryDescriptor::withOptions(kIOMemoryKernelUserShared, mDevice->mPrefPanelMemoryBufSize);
 

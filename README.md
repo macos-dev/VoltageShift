@@ -122,7 +122,7 @@ should show "com.sicreative.VoltageShift"  on return.
 
 #### Caution: Remaining the kext on system may violate system because other program may change the MSR without root (sudo) authorizing.
 
-### Notes: for Big Sur or Higher, you need rebuild kextcache via kmutil, and Restart via System Preferences, see comments [#79](https://github.com/sicreative/VoltageShift/issues/79)
+### Notes: for Big Sur or Higher, you need rebuild kextcache via kmutil, and Restart via System Preferences, see issues [#79](https://github.com/sicreative/VoltageShift/issues/79)
 
 
 

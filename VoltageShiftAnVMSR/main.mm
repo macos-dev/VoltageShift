@@ -6,12 +6,13 @@
 //
 //  MSR Kext Access modifiyed from AnVMSR by  Andy Vandijck Copyright (C) 2013 AnV Software
 //
-//   This is licensed under the GNU General Public License v3.0
+//  This is licensed under the GNU General Public License v3.0
 //
 
 #import <Foundation/Foundation.h>
 #import <sstream>
 #import <vector>
+
 #include "TargetConditionals.h"
 
 // SET TRUE WHEN YOUR SYSTEM REQUIRE OFFSET
@@ -54,41 +55,41 @@ enum
 
 typedef struct
 {
-	UInt32 action;
+    UInt32 action;
     UInt32 msr;
     UInt64 param;
 } inout;
 
 io_service_t getService()
 {
-	io_service_t service = 0;
-	mach_port_t masterPort;
-	io_iterator_t iter;
-	kern_return_t ret;
-	io_string_t path;
+    io_service_t service = 0;
+    mach_port_t masterPort;
+    io_iterator_t iter;
+    kern_return_t ret;
+    io_string_t path;
 
-	ret = IOMasterPort(MACH_PORT_NULL, &masterPort);
-	if (ret != KERN_SUCCESS) {
-		printf("Can't get masterport\n");
-		goto failure;
-	}
-
-	ret = IOServiceGetMatchingServices(masterPort, IOServiceMatching(kAnVMSRClassName), &iter);
-	if (ret != KERN_SUCCESS) {
-		printf("VoltageShift.kext is not running\n");
-		goto failure;
-	}
-
-	service = IOIteratorNext(iter);
-	IOObjectRelease(iter);
-
-	ret = IORegistryEntryGetPath(service, kIOServicePlane, path);
-	if (ret != KERN_SUCCESS) {
+    ret = IOMasterPort(MACH_PORT_NULL, &masterPort);
+    if (ret != KERN_SUCCESS) {
+        printf("Can't get masterport\n");
         goto failure;
-	}
+    }
+
+    ret = IOServiceGetMatchingServices(masterPort, IOServiceMatching(kAnVMSRClassName), &iter);
+    if (ret != KERN_SUCCESS) {
+        printf("VoltageShift.kext is not running\n");
+        goto failure;
+    }
+
+    service = IOIteratorNext(iter);
+    IOObjectRelease(iter);
+
+    ret = IORegistryEntryGetPath(service, kIOServicePlane, path);
+    if (ret != KERN_SUCCESS) {
+        goto failure;
+    }
 
 failure:
-	return service;
+    return service;
 }
 
 void usage(const char *name)
@@ -126,6 +127,7 @@ void printBits(size_t const size, void const * const ptr)
             byte = (b[i] >> j) & 1;
             printf("%u", byte);
         }
+
         if (i!=0)
             printf(" ");
         else
@@ -133,19 +135,18 @@ void printBits(size_t const size, void const * const ptr)
     }
 }
 
-// Read OC Mailbox
-// Ref of Intel Turbo Boost Max Technology 3.0 legacy (non HWP) enumeration driver
-// https://github.com/torvalds/linux/blob/master/drivers/platform/x86/intel_turbo_max_3.c
+//  Read OC Mailbox
+//  Ref of Intel Turbo Boost Max Technology 3.0 legacy (non HWP) enumeration driver
+//  https://github.com/torvalds/linux/blob/master/drivers/platform/x86/intel_turbo_max_3.c
 //
-//    offset 0x40 is the OC Mailbox Domain bit relative for:
+//  offset 0x40 is the OC Mailbox Domain bit relative for:
 //
-//   domain : 0 - CPU
-//            1 - GPU
-//            2 - CPU Cache
-//            3 - System Agency
-//            4 - Analogy I/O
-//            5 - Digtal I/O
-//
+//  domain : 0 - CPU
+//           1 - GPU
+//           2 - CPU Cache
+//           3 - System Agency
+//           4 - Analogy I/O
+//           5 - Digtal I/O
 //
 int writeOCMailBox (int domain,int offset)
 {
@@ -220,7 +221,7 @@ int writeOCMailBox (int domain,int offset)
                                     &outsize
                                     );
     if (ret != KERN_SUCCESS) {
-        printf("cpu OC mailbox write failed\n");
+        printf("CPU OC mailbox write failed\n");
         return 0;
     }
 
@@ -255,7 +256,7 @@ int readOCMailBox (int domain)
                                     &outsize
                                     );
     if (ret != KERN_SUCCESS) {
-        printf("cpu OC mailbox write failed\n");
+        printf("CPU OC mailbox write failed\n");
         return 0;
     }
 
@@ -275,7 +276,7 @@ int readOCMailBox (int domain)
         }
 
         if (out.param & (((uint64)0x1) << MSR_OC_MAILBOX_BUSY_BIT)) {
-            printf(" OC mailbox still processing\n");
+            printf("OC mailbox still processing\n");
             ret = -EBUSY;
             continue;
         }
@@ -296,7 +297,6 @@ int readOCMailBox (int domain)
 
     return returnvalue / 2 ;
 }
-
 
 int showcpuinfo()
 {
@@ -327,11 +327,11 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x610 ");
+            printf("Can't read 0x610 ");
             return (1);
         }
-        p1power = (double)(out.param & 0x7FFF ) / 8;
-        p2power = (double)(out.param >> 32 & 0x7FFF ) / 8;
+        p1power = (double)(out.param & 0x7FFF) / 8;
+        p2power = (double)(out.param >> 32 & 0x7FFF) / 8;
     }
 
     if (turbodisable==false) {
@@ -344,7 +344,7 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x1ad ");
+            printf("Can't read 0x1ad");
             return (1);
         }
         turbodisable = ((out.param >> 38 & 0x1) == 1);
@@ -360,7 +360,7 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x194 ");
+            printf("Can't read 0x194");
             return (1);
         }
         oclocked = ((out.param >> 20 & 0x1) == 1);
@@ -376,10 +376,10 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0xce ");
+            printf("Can't read 0xce");
             return (1);
         }
-        basefreq = (double)(out.param >> 8 & 0xFF ) * 100;
+        basefreq = (double)(out.param >> 8 & 0xFF) * 100;
     }
 
     if (power_units == 0) {
@@ -394,7 +394,7 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x0606 ");
+            printf("Can't read 0x0606");
             return (1);
         }
         power_units =pow(0.5,(double)((out.param>>8)&0x1f)) * 10;
@@ -412,7 +412,7 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x01AD ");
+            printf("Can't read 0x01AD");
             return (1);
         }
 
@@ -445,7 +445,7 @@ int showcpuinfo()
                                     &outsize
                                     );
     if (ret != KERN_SUCCESS) {
-        printf("Can't read  0x611 ");
+        printf("Can't read 0x611");
         return (1);
     }
 
@@ -455,14 +455,14 @@ int showcpuinfo()
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
     ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+                                    AnVMSRActionMethodRDMSR,
+                                    &in,
+                                    sizeof(in),
+                                    &out,
+                                    &outsize
+                                    );
     if (ret != KERN_SUCCESS) {
-        printf("Can't read  0x639 ");
+        printf("Can't read 0x639");
         return (1);
     }
 
@@ -488,7 +488,7 @@ int showcpuinfo()
                                     &outsize
                                     );
     if (ret != KERN_SUCCESS) {
-        printf("Can't read power 0x611 ");
+        printf("Can't read power 0x611");
         return (1);
     }
 
@@ -505,8 +505,8 @@ int showcpuinfo()
                                     &outsize
                                     );
     if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x639 ");
-            return (1);
+        printf("Can't read 0x639");
+        return (1);
     }
 
     powercore =  power_units * ((double)out.param - lastpowercore) / second;
@@ -539,7 +539,7 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read voltage 0x1A2 \n");
+            printf("Can't read voltage 0x1A2\n");
             return (1);
         }
         dtsmax = out.param >> 16 & 0xFF;
@@ -555,7 +555,7 @@ int showcpuinfo()
                                     &outsize
                                     );
     if (ret != KERN_SUCCESS) {
-        printf("Can't read voltage 0x19C \n");
+        printf("Can't read voltage 0x19C\n");
         return (1);
     }
 
@@ -564,6 +564,7 @@ int showcpuinfo()
 
     if (OFFSET_TEMP)
         temp -= tempoffset;
+
     printf("CPU Freq: %2.1fghz, Voltage: %.4fv, Power:pkg %2.2fw /core %2.2fw,Temp: %llu c", freq,voltage,powerpkg,powercore,temp);
 
     return (0);
@@ -593,7 +594,7 @@ int setPower(int argc,int p1,int p2)
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x610 ");
+            printf("Can't read 0x610");
             return (1);
         }
         p1power = (double)(out.param & 0x7FFF ) / 8;
@@ -614,10 +615,10 @@ int setPower(int argc,int p1,int p2)
         return (1);
     }
 
-    for(int i=0;i<15;i++) {
+    for (int i=0;i<15;i++) {
         out.param ^= (-(p1>>i &0x1) ^ out.param) & (1UL << i);
     }
-    for(int i=32;i<47;i++) {
+    for (int i=32;i<47;i++) {
         out.param ^= (-(p2>>i &0x1) ^ out.param) & (1UL << i);
     }
 
@@ -679,7 +680,7 @@ int setTurbo(int argc,bool enable)
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read  0x1a0 ");
+            printf("Can't read 0x1a0");
             return (1);
         }
         turbodisabled = (out.param >> 38 & 0x1)>0?true:false;
@@ -763,13 +764,12 @@ int setoffsetdaemons(int argc,const char * argv[])
             p1 = (int)strtol((char *)argv[i+2],NULL,10) *8;
             if (p1)
                 isUnloadOnEnd = false;
-                
         }
 
         int offset = (int)strtol((char *)argv[i+2],NULL,10);
 
         if (readOCMailBox(i)!=offset) {
-             writeOCMailBox(i, offset);
+            writeOCMailBox(i, offset);
         }
     }
     return(0);
@@ -786,6 +786,7 @@ int setoffset(int argc,const char * argv[])
 
     if (argc >= 3) {
         cpu_offset = strtol((char *)argv[2],NULL,10);
+
         if (argc >=4)
             gpu_offset = strtol((char *)argv[3],NULL,10);
         if (argc >=5)
@@ -822,9 +823,9 @@ int setoffset(int argc,const char * argv[])
     printf("--------------------------------------------------------------------------\n");
 
     if (argc >= 3)
-            writeOCMailBox(0, (int)cpu_offset);
+        writeOCMailBox(0, (int)cpu_offset);
     if (argc >= 4)
-            writeOCMailBox(1, (int)gpu_offset);
+        writeOCMailBox(1, (int)gpu_offset);
     if (argc >= 5)
         writeOCMailBox(2, (int)cpuccache_offset);
     if (argc >= 6)
@@ -859,7 +860,7 @@ void unloadkext()
         return;
 
     if (connect) {
-       kern_return_t ret = IOServiceClose(connect);
+        kern_return_t ret = IOServiceClose(connect);
         if (ret != KERN_SUCCESS) {
         }
     }
@@ -1119,9 +1120,9 @@ void writeLaunchDaemons(std::vector<int>  values = {0},int min = 160)
     printf("Digital IO       %d %s mv\n",values[5],values[5]>0?"!!!!!":"");
 
     if (values.size()>=7 && values[6]>=0)
-     printf("Turbo              %s \n",values[6]>0?"Enable":"Disable");
+        printf("Turbo              %s \n",values[6]>0?"Enable":"Disable");
     if (values.size()>=9 && values[7]>=0 && values[8]>=0)
-     printf("Power            %d  %d  \n",values[7],values[8]);
+        printf("Power            %d  %d  \n",values[7],values[8]);
     if (values.size()>=10 && values[9]>=0)
         printf("The kext will %sremain on System when unload  \n",values[9]>0?"":"not ");
     // End Messages
@@ -1148,6 +1149,7 @@ void intHandler(int sig)
     }
     else
         signal(SIGINT, intHandler);
+
     getchar(); // Get new line character
 }
 
@@ -1169,7 +1171,6 @@ int main(int argc, const char * argv[])
 
     if (argc >= 2) {
         parameter = (char *)argv[1];
-        
     }
     else {
         usage(argv[0]);
@@ -1189,9 +1190,9 @@ int main(int argc, const char * argv[])
             return (1);
     }
 
-	kern_return_t ret;
-	ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
-	if (ret != KERN_SUCCESS) {
+    kern_return_t ret;
+    ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
+    if (ret != KERN_SUCCESS) {
         printf("Couldn't open IO Service\n");
     }
 
@@ -1210,7 +1211,7 @@ int main(int argc, const char * argv[])
         printf("Analogy I/O: %dmv\n",readOCMailBox(4));
         printf("Digital I/O: %dmv\n",readOCMailBox(5));
         showcpuinfo();
-           printf("\n");
+        printf("\n");
     }
     else if (!strncmp(parameter, "mon", 3)) {
         printf("------------------------------------------------------\n");
@@ -1254,7 +1255,6 @@ int main(int argc, const char * argv[])
                     }
                 }
             }
-
             sleep(1);
             fflush(stdout);
             printf("\r");
