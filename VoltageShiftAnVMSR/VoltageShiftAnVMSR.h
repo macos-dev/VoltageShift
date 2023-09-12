@@ -6,7 +6,6 @@
 #include <IOKit/IOService.h>
 #include <IOKit/IOUserClient.h>
 #include <IOKit/IOBufferMemoryDescriptor.h>
-
 // Added System wdmsr lib.
 #include <libkern/libkern.h>
 

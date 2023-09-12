@@ -272,7 +272,7 @@ int readOCMailBox (int domain)
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read voltage 0xe7 \n");
+            printf("Can't read voltage 0xe7\n");
         }
 
         if (out.param & (((uint64)0x1) << MSR_OC_MAILBOX_BUSY_BIT)) {
@@ -283,10 +283,8 @@ int readOCMailBox (int domain)
 
         if ((out.param >> MSR_OC_MAILBOX_RSP_OFFSET) & 0xff) {
             printf("OC mailbox cmd failed\n");
-
             break;
         }
-
         break;
     }
 
@@ -327,7 +325,7 @@ int showcpuinfo()
                                         &outsize
                                         );
         if (ret != KERN_SUCCESS) {
-            printf("Can't read 0x610 ");
+            printf("Can't read 0x610");
             return (1);
         }
         p1power = (double)(out.param & 0x7FFF) / 8;
@@ -597,8 +595,8 @@ int setPower(int argc,int p1,int p2)
             printf("Can't read 0x610");
             return (1);
         }
-        p1power = (double)(out.param & 0x7FFF ) / 8;
-        p2power = (double)(out.param >> 32 & 0x7FFF ) / 8;
+        p1power = (double)(out.param & 0x7FFF) / 8;
+        p2power = (double)(out.param >> 32 & 0x7FFF) / 8;
     }
 
     printf("Current Setting: PL1(Long term): %.fW, PL2(Short term) %.fW\n",p1power,p2power);
@@ -733,6 +731,7 @@ int setTurbo(int argc,const char * argv[])
     else {
         enable = (int)strtol((char *)argv[2],NULL,10)==0;
     }
+
     return setTurbo(argc,enable);
 }
 
@@ -751,7 +750,6 @@ int setoffsetdaemons(int argc,const char * argv[])
         if (i==7) {
             p1 = (int)strtol((char *)argv[i+2],NULL,10) *8;
              continue;
-          
         }
         if (i==8) {
             if (p1!=0) {
@@ -872,7 +870,6 @@ void unloadkext()
     << "com.sicreative.VoltageShift"
     << " " ;
     system(output.str().c_str());
-
 }
 
 void loadkext()
@@ -919,7 +916,6 @@ void removeLaunchDaemons()
         char str [255] ;
         while (fgets(str, 255, fp) != NULL) {
             printf("%s", str);
-
             if (strstr(str,"VoltageShift.kext")!=NULL) {
                 error ++;
                 continue;
@@ -965,7 +961,7 @@ void writeLaunchDaemons(std::vector<int>  values = {0},int min = 160)
     std::stringstream output;
 
     if (min>720) {
-          printf("------------------------------------\n");
+        printf("------------------------------------\n");
         printf("Out of Interval setting, please select between 0 (Run only bootup) to 720mins \n");
         printf("------------------------------------\n");
 
@@ -1244,8 +1240,7 @@ int main(int argc, const char * argv[])
 
                     kern_return_t ret;
                     ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
-                    if (ret != KERN_SUCCESS)
-                    {
+                    if (ret != KERN_SUCCESS) {
                         printf("Couldn't open IO Service\n");
                         if (i==4)
                             return (1);
@@ -1317,7 +1312,7 @@ int main(int argc, const char * argv[])
     else if (!strncmp(parameter, "buildlaunchd", 12)) {
         std::vector<int> arg;
 
-        if (argc >=3 )
+        if (argc >=3)
             arg.push_back((int)strtol((char *)argv[2],NULL,10));
         if (argc >=4)
             arg.push_back((int)strtol((char *)argv[3],NULL,10));
@@ -1344,7 +1339,7 @@ int main(int argc, const char * argv[])
             writeLaunchDaemons(arg);
         }
     }
-    else if (!strncmp(parameter, "offsetdaemons",12)) {
+    else if (!strncmp(parameter, "offsetdaemons", 12)) {
         setoffsetdaemons(argc,argv);
     }
     else if (!strncmp(parameter, "offset", 6)) {

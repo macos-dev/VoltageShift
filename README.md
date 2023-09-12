@@ -129,12 +129,14 @@ should show "com.sicreative.VoltageShift"  on return.
 ChangeLog
 ---------
 
-Versions 1.25:
+Version 1.27:
+1. Use MacKernelSDK Acidanthera for Headers & link binary to libkmod.a for vtable (which required for Xcode 11)
+
+Version 1.25:
 1. Support kext remaining on System
 
-Versions 1.24:
+Version 1.24:
 1. Support Big Sur and Universial building on Xcode12 (load on Apple Silicon will simply exit )
-
 
 Version 1.22:
 1. Change read of timer from system api instead of MSR for improve of compatibility. 

@@ -41,7 +41,6 @@ bool VoltageShiftAnVMSR::start (IOService *provider)
 void VoltageShiftAnVMSR::stop (IOService *provider)
 {
     IOLog ("AnVMSR: Stopping...\n");
-
     super::stop (provider);
 }
 
@@ -75,7 +74,7 @@ IOReturn VoltageShiftAnVMSR::runAction(UInt32 action, UInt32 *outSize, void **ou
 IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID, UInt32 type, IOUserClient ** handler )
 {
 #if TARGET_CPU_ARM64
-    IOLog("VoltageShiftAnVMSR: is not support Apple Silicon (ARM64)\n");
+    IOLog("VoltageShiftAnVMSR: is not supported for Apple Silicon (ARM64)\n");
     return(kIOReturnError);
 #endif // TARGET_CPU_ARM64
 
@@ -172,8 +171,8 @@ OSDefineMetaClassAndStructors(AnVMSRUserClient, IOUserClient);
 const AnVMSRUserClient *AnVMSRUserClient::withTask(task_t owningTask)
 {
     AnVMSRUserClient *client;
-
     client = new AnVMSRUserClient;
+
     if (client != NULL) {
         if (client->init() == false) {
             client->release();
@@ -183,6 +182,7 @@ const AnVMSRUserClient *AnVMSRUserClient::withTask(task_t owningTask)
     if (client != NULL) {
         client->fTask = owningTask;
     }
+
     return (client);
 }
 
@@ -207,8 +207,7 @@ void AnVMSRUserClient::messageHandler(UInt32 type, const char *format, ...)
     va_end(args);
 }
 
-bool AnVMSRUserClient::initWithTask(task_t owningTask, void *securityID, UInt32 type,
-                                       OSDictionary *properties)
+bool AnVMSRUserClient::initWithTask(task_t owningTask, void *securityID, UInt32 type, OSDictionary *properties)
 {
     return super::initWithTask(owningTask, securityID, type, properties);
 }
@@ -289,8 +288,7 @@ IOExternalMethod * AnVMSRUserClient::getTargetAndMethodForIndex(IOService **targ
     return NULL;
 }
 
-IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize,
-                                           IOByteCount *outputSize)
+IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize)
 {
     inout * msrdata = (inout *)dataIn;
     inout * msroutdata = (inout *)dataOut;
@@ -316,8 +314,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
     return kIOReturnSuccess;
 }
 
-IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize,
-                                             IOByteCount *outputSize)
+IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize)
 {
     inout * msrdata = (inout *)dataIn;
 
@@ -338,8 +335,7 @@ IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IO
     return kIOReturnSuccess;
 }
 
-IOReturn AnVMSRUserClient::clientMemoryForType(UInt32 type, IOOptionBits *options,
-                                                  IOMemoryDescriptor **memory)
+IOReturn AnVMSRUserClient::clientMemoryForType(UInt32 type, IOOptionBits *options, IOMemoryDescriptor **memory)
 {
     IOBufferMemoryDescriptor *memDesc;
     char *msgBuffer;
@@ -355,7 +351,8 @@ IOReturn AnVMSRUserClient::clientMemoryForType(UInt32 type, IOOptionBits *option
 
     msgBuffer = (char *) memDesc->getBytesNoCopy();
     bcopy(mDevice->mPrefPanelMemoryBuf, msgBuffer, mDevice->mPrefPanelMemoryBufSize);
-    *memory = memDesc; // automatically released after memory is mapped into task
+    // automatically released after memory is mapped into task
+    *memory = memDesc;
 
     return(kIOReturnSuccess);
 }
