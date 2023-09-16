@@ -474,7 +474,7 @@ int showcpuinfo()
     uint64 secondtime;
     secondtime = clock_gettime_nsec_np(CLOCK_REALTIME) / 1000;
     secondtime -= firsttime;
-    double second = (double)secondtime /100000;
+    double second = (double)secondtime / 100000;
 
     in.msr = 0x611;
     in.action = AnVMSRActionMethodRDMSR;
@@ -649,7 +649,6 @@ int setPower(int argc, const char * argv[])
         printf("%s power <PL1> <PL2> \n", argv[0]);
         printf("PL1 - long term power limited\n");
         printf("PL2 - short term power limited\n");
-        printf("------------------------------------------------------------------------\n");
     }
     else {
         p1 = (int)strtol((char *)argv[2],NULL,10) *8;
@@ -854,7 +853,6 @@ int setoffset(int argc, const char * argv[])
     return (0);
 }
 
-
 void unloadkext()
 {
     if (!isUnloadOnEnd)
@@ -871,7 +869,7 @@ void unloadkext()
     std::stringstream output;
     output << "sudo kextunload -q -b"
     << "com.sicreative.VoltageShift"
-    << " " ;
+    << " ";
     system(output.str().c_str());
 }
 
@@ -940,7 +938,6 @@ void removeLaunchDaemons()
         printf("sudo rm -rf /Library/LaunchDaemons/com.sicreative.VoltageShift.plist\n");
         printf("sudo rm -rf /Library/Application\\ Support/VoltageShift\n");
         printf("------------------------------------------------------------------------\n");
-        printf("------------------------------------------------------------------------\n");
 
         return;
     }
@@ -955,7 +952,6 @@ void removeLaunchDaemons()
     printf("Don't forget enable the CSR protect by following methond:\n");
     printf("1. Boot start by Command-R to recovery mode:\n");
     printf("2. In \"Terminal\" >> csrutil enable\n");
-    printf("------------------------------------------------------------------------\n");
     printf("------------------------------------------------------------------------\n");
 }
 
@@ -1036,6 +1032,8 @@ void writeLaunchDaemons(std::vector<int>values = {0}, int min = 160)
     << "\" > /Library/LaunchDaemons/com.sicreative.VoltageShift.plist"
     << " ";
     system(output.str().c_str());
+    output.str("sudo chmod 644 /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
+    system(output.str().c_str());
     output.str("sudo chown root:wheel /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
     system(output.str().c_str());
     output.str("sudo mkdir /Library/Application\\ Support/VoltageShift");
@@ -1091,7 +1089,6 @@ void writeLaunchDaemons(std::vector<int>values = {0}, int min = 160)
         printf("Can't build the launchd. Can´t create the files, please use:\n");
         printf("sudo ./voltageshift buildlaunchd ....\n");
         printf("for Root privilege.\n");
-        printf("------------------------------------------------------------------------\n");
         printf("------------------------------------------------------------------------\n");
 
         return;
@@ -1149,8 +1146,8 @@ void intHandler(int sig)
     }
     else
         signal(SIGINT, intHandler);
-
-    getchar(); // Get new line character
+    // Get new line character
+    getchar();
 }
 
 int main(int argc, const char * argv[])

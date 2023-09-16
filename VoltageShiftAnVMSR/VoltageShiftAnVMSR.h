@@ -40,7 +40,7 @@ class VoltageShiftAnVMSR : public IOService
     OSDeclareDefaultStructors(VoltageShiftAnVMSR)
 
 public:
-    virtual bool  init(OSDictionary *dictionary = 0);
+    virtual bool init(OSDictionary *dictionary = 0);
     virtual void free(void);
     virtual bool start(IOService *provider);
     virtual void stop(IOService *provider);
