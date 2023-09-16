@@ -4,7 +4,7 @@
 //  Created by SC Lee on 12/09/13.
 //  Copyright (c) 2017 SC Lee . All rights reserved.
 //
-//  MSR Kext Access modifiyed from AnVMSR by  Andy Vandijck Copyright (C) 2013 AnV Software
+//  MSR Kext Access modifiyed from AnVMSR by Andy Vandijck Copyright (C) 2013 AnV Software
 //
 //  This is licensed under the GNU General Public License v3.0
 //
@@ -94,25 +94,25 @@ failure:
 
 void usage(const char *name)
 {
-    printf("--------------------------------------------------------------------------\n");
-    printf("VoltageShift Undervoltage Tool v 1.27 for Intel Broadwell/Haswell \n");
-    printf("Copyright (C) 2020 SC Lee \n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
+    printf("VoltageShift Undervoltage Tool v1.27 for Intel Broadwell/Haswell\n");
+    printf("Copyright (C) 2020 SC Lee\n");
+    printf("------------------------------------------------------------------------\n");
     printf("Usage:\n");
-    printf("set voltage:  \n    %s offset <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O>\n\n", name);
-    printf("set boot and auto apply:\n  sudo %s buildlaunchd <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O> <turbo> <pl1> <pl2> <remain> <UpdateMins (0 only apply at bootup)>\n\n", name);
-    printf("remove boot and auto apply:\n    %s removelaunchd \n\n", name);
-    printf("get info of current setting:\n    %s info \n\n", name);
-    printf("continuous monitor of CPU:\n    %s mon \n\n", name);
-    printf("set Power Limit: %s power <PL1> <PL2>\n\n", name);
-    printf("set Turbo Enabled: %s turbo <0/1>\n\n", name);
-    printf("read MSR: %s read <HEX_MSR>\n\n", name);
-    printf("write MSR: %s write <HEX_MSR> <HEX_VALUE>\n\n", name);
+    printf("Set voltage:\n   %s offset <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O>\n", name);
+    printf("Set boot and auto apply:\n   sudo %s buildlaunchd <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O> <turbo> <pl1> <pl2> <remain> <UpdateMins (0 only apply at bootup)>\n", name);
+    printf("Remove boot and auto apply:\n   %s removelaunchd \n", name);
+    printf("Get info of current setting:\n   %s info \n", name);
+    printf("Continuous monitor of CPU:\n   %s mon \n", name);
+    printf("Set Power Limit: %s power <PL1> <PL2>\n", name);
+    printf("Set Turbo Enabled: %s turbo <0/1>\n", name);
+    printf("Read MSR: %s read <HEX_MSR>\n", name);
+    printf("Write MSR: %s write <HEX_MSR> <HEX_VALUE>\n", name);
 }
 
 unsigned long long hex2int(const char *s)
 {
-    return strtoull(s,NULL,16);
+    return strtoull(s, NULL, 16);
 }
 
 void printBits(size_t const size, void const * const ptr)
@@ -122,13 +122,13 @@ void printBits(size_t const size, void const * const ptr)
     int i, j;
     printf("(");
 
-    for (i=size-1;i>=0;i--) {
-        for (j=7;j>=0;j--) {
+    for (i = size-1; i >= 0; i--) {
+        for (j = 7; j >= 0; j--) {
             byte = (b[i] >> j) & 1;
             printf("%u", byte);
         }
 
-        if (i!=0)
+        if (i != 0)
             printf(" ");
         else
             puts(")");
@@ -148,41 +148,41 @@ void printBits(size_t const size, void const * const ptr)
 //           4 - Analogy I/O
 //           5 - Digtal I/O
 //
-int writeOCMailBox (int domain,int offset)
+int writeOCMailBox(int domain,int offset)
 {
     if (offset > 0 && !damagemode) {
-        printf("--------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------\n");
         printf("VoltageShift offset Tool\n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        printf("Your settings require overclocking. This May Damage you Computer !!!! \n");
+        printf("------------------------------------------------------------------------\n");
+        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        printf("Your settings require overclocking. This May Damage you Computer !!!!\n");
         printf("use --damaged for override\n");
-        printf("     usage: voltageshift --damage offset ... for run\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        printf("--------------------------------------------------------------------------\n");
+        printf("usage: voltageshift --damage offset ... for run\n");
+        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        printf("------------------------------------------------------------------------\n");
 
         return -1;
     }
 
-    if (offset < -250  && !damagemode) {
-        printf("--------------------------------------------------------------------------\n");
+    if (offset < -250 && !damagemode) {
+        printf("------------------------------------------------------------------------\n");
         printf("VoltageShift offset Tool\n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        printf("Your settings are too low. Are you sure you want those values \n");
+        printf("------------------------------------------------------------------------\n");
+        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        printf("Your settings are too low. Are you sure you want those values\n");
         printf("use --damaged for override\n");
-        printf("     usage: voltageshift --damage offset ... for run\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        printf("--------------------------------------------------------------------------\n");
+        printf("usage: voltageshift --damage offset ... for run\n");
+        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        printf("------------------------------------------------------------------------\n");
 
         return -1;
     }
 
     if (damagemode) {
-        printf("--------------------------------------------------------------------------\n");
-        printf("VoltageShift offset Tool Damage Mode in Process \n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("VoltageShift offset Tool Damage Mode in Process\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     }
 
     uint64 offsetvalue;
@@ -280,7 +280,6 @@ int readOCMailBox (int domain)
             ret = -EBUSY;
             continue;
         }
-
         if ((out.param >> MSR_OC_MAILBOX_RSP_OFFSET) & 0xff) {
             printf("OC mailbox cmd failed\n");
             break;
@@ -289,11 +288,12 @@ int readOCMailBox (int domain)
     }
 
     int returnvalue = (int)(out.param >> 20) & 0xFFF;
+
     if (returnvalue > 2047) {
         returnvalue = -(0x1000-returnvalue);
     }
 
-    return returnvalue / 2 ;
+    return returnvalue / 2;
 }
 
 int showcpuinfo()
@@ -315,7 +315,7 @@ int showcpuinfo()
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
 
-    if (p1power==0) {
+    if (p1power == 0) {
         in.msr = 0x610;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -332,7 +332,7 @@ int showcpuinfo()
         p2power = (double)(out.param >> 32 & 0x7FFF) / 8;
     }
 
-    if (turbodisable==false) {
+    if (turbodisable == false) {
         in.msr = 0x1a0;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -348,7 +348,7 @@ int showcpuinfo()
         turbodisable = ((out.param >> 38 & 0x1) == 1);
     }
 
-    if (oclocked==false) {
+    if (oclocked == false) {
         in.msr = 0x194;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -364,7 +364,7 @@ int showcpuinfo()
         oclocked = ((out.param >> 20 & 0x1) == 1);
     }
 
-    if (basefreq==0) {
+    if (basefreq == 0) {
         in.msr = 0xce;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -395,7 +395,7 @@ int showcpuinfo()
             printf("Can't read 0x0606");
             return (1);
         }
-        power_units =pow(0.5,(double)((out.param>>8)&0x1f)) * 10;
+        power_units = pow(0.5,(double)((out.param >> 8) & 0x1f)) * 10;
     }
 
     if (maxturbofreq == 0) {
@@ -414,22 +414,23 @@ int showcpuinfo()
             return (1);
         }
 
-        maxturbofreq =(double)(out.param & 0xff) * 100.0;
-        multturbofreq =(double)(out.param>>8 & 0xff) * 100.0;
-        fourthturbofreq =(double)(out.param>>24 &0xff) * 100.0;
-        sixthturbofreq =(double)(out.param>>40 &0xff) * 100.0;
-        eightthturbofreq =(double)(out.param>>56 &0xff) * 100.0;
-        if (eightthturbofreq!=0) {
-            printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4/6/8): %.0f/%.0f/%.0f/%.0f/%.0f (mhz) \n",basefreq ,maxturbofreq,multturbofreq,fourthturbofreq,sixthturbofreq,eightthturbofreq);
+        maxturbofreq = (double)(out.param & 0xff) * 100.0;
+        multturbofreq = (double)(out.param >> 8 & 0xff) * 100.0;
+        fourthturbofreq = (double)(out.param >> 24 & 0xff) * 100.0;
+        sixthturbofreq = (double)(out.param >> 40 & 0xff) * 100.0;
+        eightthturbofreq = (double)(out.param >> 56 & 0xff) * 100.0;
+
+        if (eightthturbofreq != 0) {
+            printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4/6/8): %.0f/%.0f/%.0f/%.0f/%.0f (mhz)\n", basefreq, maxturbofreq, multturbofreq, fourthturbofreq, sixthturbofreq, eightthturbofreq);
         }
-        else if (sixthturbofreq!=0) {
-            printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4/6): %.0f/%.0f/%.0f/%.0f (mhz) \n",basefreq ,maxturbofreq,multturbofreq,fourthturbofreq,sixthturbofreq);
+        else if (sixthturbofreq != 0) {
+            printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4/6): %.0f/%.0f/%.0f/%.0f (mhz)\n", basefreq, maxturbofreq, multturbofreq, fourthturbofreq, sixthturbofreq);
         }
         else {
-            printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4): %.0f/%.0f/%.0f (mhz)",basefreq ,maxturbofreq,multturbofreq,fourthturbofreq);
+            printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4): %.0f/%.0f/%.0f (mhz)", basefreq, maxturbofreq, multturbofreq, fourthturbofreq);
         }
 
-        printf("%s %s PL1: %.0fW PL2: %.0fW \n",oclocked?"OC_Locked":"",turbodisable?"Turbo_Disabled":"",p1power,p2power);
+        printf("%s %s PL1: %.0fW PL2: %.0fW\n", oclocked?"OC_Locked":"", turbodisable?"Turbo_Disabled":"", p1power, p2power);
     }
 
     in.msr = 0x611;
@@ -467,13 +468,13 @@ int showcpuinfo()
     unsigned long long lastpowercore = out.param;
 
     uint64 firsttime;
-    firsttime = clock_gettime_nsec_np(CLOCK_REALTIME)/1000;
+    firsttime = clock_gettime_nsec_np(CLOCK_REALTIME) / 1000;
     usleep(100000);
 
     uint64 secondtime;
-    secondtime = clock_gettime_nsec_np(CLOCK_REALTIME)/1000;
+    secondtime = clock_gettime_nsec_np(CLOCK_REALTIME) / 1000;
     secondtime -= firsttime;
-    double second = (double)secondtime / 100000;
+    double second = (double)secondtime /100000;
 
     in.msr = 0x611;
     in.action = AnVMSRActionMethodRDMSR;
@@ -522,12 +523,12 @@ int showcpuinfo()
         return (1);
     }
 
-    double voltage  = out.param >> 32 & 0xFFFF;
+    double voltage = out.param >> 32 & 0xFFFF;
     freq = out.param >> 8 & 0xFF;
     freq /= 10;
     voltage /= pow(2,13);
 
-    if (dtsmax==0) {
+    if (dtsmax == 0) {
         in.msr = 0x1A2;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -563,12 +564,12 @@ int showcpuinfo()
     if (OFFSET_TEMP)
         temp -= tempoffset;
 
-    printf("CPU Freq: %2.1fghz, Voltage: %.4fv, Power:pkg %2.2fw /core %2.2fw,Temp: %llu c", freq,voltage,powerpkg,powercore,temp);
+    printf("CPU Freq: %2.1fghz, Voltage: %.4fv, Power:pkg %2.2fw /core %2.2fw, Temp: %llu c", freq, voltage, powerpkg, powercore, temp);
 
     return (0);
 }
 
-int setPower(int argc,int p1,int p2)
+int setPower(int argc, int p1, int p2)
 {
     inout in;
     inout out;
@@ -579,10 +580,10 @@ int setPower(int argc,int p1,int p2)
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
 
-    double p1power =0;
-    double p2power =0;
+    double p1power = 0;
+    double p2power = 0;
 
-    if (p1power==0) {
+    if (p1power == 0) {
         in.msr = 0x610;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -599,25 +600,25 @@ int setPower(int argc,int p1,int p2)
         p2power = (double)(out.param >> 32 & 0x7FFF) / 8;
     }
 
-    printf("Current Setting: PL1(Long term): %.fW, PL2(Short term) %.fW\n",p1power,p2power);
+    printf("Current Setting: PL1(Long term): %.fW, PL2(Short term) %.fW\n", p1power, p2power);
 
-    if (argc <=3) {
+    if (argc <= 3) {
         return (1);
     }
 
-    if (p1==-1 || p2==-1) {
+    if (p1 == -1 || p2 == -1) {
         return (1);
     }
-    if (p1<5*8 || p2<5*8) {
-        printf("your setting may too low, at least 5W \n");
+    if (p1 < 5*8 || p2 < 5*8) {
+        printf("your setting may too low, at least 5W\n");
         return (1);
     }
 
-    for (int i=0;i<15;i++) {
-        out.param ^= (-(p1>>i &0x1) ^ out.param) & (1UL << i);
+    for (int i = 0; i < 15; i++) {
+        out.param ^= (-(p1 >> i & 0x1)^out.param) & (1UL << i);
     }
-    for (int i=32;i<47;i++) {
-        out.param ^= (-(p2>>i &0x1) ^ out.param) & (1UL << i);
+    for (int i = 32; i < 47; i++) {
+        out.param ^= (-(p2 >> i & 0x1)^out.param) & (1UL << i);
     }
 
     in.action = AnVMSRActionMethodWRMSR;
@@ -633,31 +634,32 @@ int setPower(int argc,int p1,int p2)
         printf("Can't connect to StructMethod to send commands\n");
     }
     else {
-        printf("Modified Setting: PL1(Long term): %dW, PL2(Short term) %dW\n",p1/8,p2/8);
+        printf("Modified Setting: PL1(Long term): %dW, PL2(Short term) %dW\n", p1/8, p2/8);
     }
 
     return 1;
 }
 
-int setPower(int argc,const char * argv[])
+int setPower(int argc, const char * argv[])
 {
     int p1 = 0;
     int p2 = 0;
-    if (argc <=3 ) {
-        printf(" %s power <PL1> <PL2> \n",argv[0]);
+
+    if (argc <= 3) {
+        printf("%s power <PL1> <PL2> \n", argv[0]);
         printf("PL1 - long term power limited\n");
         printf("PL2 - short term power limited\n");
-        printf("------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------\n");
     }
     else {
         p1 = (int)strtol((char *)argv[2],NULL,10) *8;
         p2 = (int)strtol((char *)argv[3],NULL,10) *8;
     }
 
-    return setPower(argc,p1,p2);
+    return setPower(argc, p1, p2);
 }
 
-int setTurbo(int argc,bool enable)
+int setTurbo(int argc, bool enable)
 {
     inout in;
     inout out;
@@ -668,7 +670,7 @@ int setTurbo(int argc,bool enable)
     bool turbodisabled = false;
     kern_return_t ret;
 
-    if (turbodisabled==false) {
+    if (turbodisabled == false) {
         in.msr = 0x1a0;
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -681,12 +683,12 @@ int setTurbo(int argc,bool enable)
             printf("Can't read 0x1a0");
             return (1);
         }
-        turbodisabled = (out.param >> 38 & 0x1)>0?true:false;
+        turbodisabled = (out.param >> 38 & 0x1) > 0 ? true:false;
     }
 
-    printf("Current Setting: Turbo Boost **%s\n",turbodisabled?"Disabled":"Enabled");
+    printf("Current Setting: Turbo Boost **%s\n", turbodisabled?"Disabled":"Enabled");
 
-    if (argc <=2 ) {
+    if (argc <= 2) {
         return (0);
     }
 
@@ -695,7 +697,7 @@ int setTurbo(int argc,bool enable)
     else
         turbodisabled = 0;
 
-    out.param ^= (-(turbodisabled?1:0>>38 &0x1) ^ out.param) & (1UL << 38);
+    out.param ^= (-(turbodisabled? 1:0 >> 38 & 0x1)^out.param) & (1UL << 38);
 
     in.action = AnVMSRActionMethodWRMSR;
     in.param = out.param;
@@ -710,55 +712,55 @@ int setTurbo(int argc,bool enable)
         printf("Can't connect to StructMethod to send commands\n");
     }
     else {
-        printf("Modified Setting: Turbo Boost **%s\n",turbodisabled?"Disabled":"Enabled");
+        printf("Modified Setting: Turbo Boost **%s\n", turbodisabled?"Disabled":"Enabled");
     }
 
     return 1;
 }
 
-int setTurbo(int argc,const char * argv[])
+int setTurbo(int argc, const char * argv[])
 {
     bool enable = true;
 
-    if (argc <=2 ) {
-        printf("------------------------------------------------------\n");
-        printf(" %s turbo 0 \n",argv[0]);
-        printf(" for disable Intel turbo \n\n");
-        printf(" %s turbo 1 \n",argv[0]);
-        printf(" for enable Intel turbo \n");
-        printf("------------------------------------------------------\n");
+    if (argc <= 2) {
+        printf("------------------------------------------------------------------------\n");
+        printf("%s turbo 0 \n", argv[0]);
+        printf("for disable Intel turbo \n");
+        printf("%s turbo 1 \n", argv[0]);
+        printf("for enable Intel turbo \n");
+        printf("------------------------------------------------------------------------\n");
     }
     else {
-        enable = (int)strtol((char *)argv[2],NULL,10)==0;
+        enable = (int)strtol((char *)argv[2],NULL,10) == 0;
     }
 
-    return setTurbo(argc,enable);
+    return setTurbo(argc, enable);
 }
 
-int setoffsetdaemons(int argc,const char * argv[])
+int setoffsetdaemons(int argc, const char * argv[])
 {
     int p1 = 0;
 
-    for (int i=0;i<argc-2;i++) {
+    for (int i = 0; i < argc-2; i++) {
         //Set turbo
-        if (i==6) {
+        if (i == 6) {
             int value = (int)strtol((char *)argv[i+2],NULL,10);
-            if (value>=0)
-                setTurbo(3,value==0);
+            if (value >= 0)
+                setTurbo(3, value == 0);
             continue;
         }
-        if (i==7) {
+        if (i == 7) {
             p1 = (int)strtol((char *)argv[i+2],NULL,10) *8;
-             continue;
+            continue;
         }
-        if (i==8) {
-            if (p1!=0) {
+        if (i == 8) {
+            if (p1 != 0) {
                 int p2 = (int)strtol((char *)argv[i+2],NULL,10) *8;
-                setPower(4, p1,p2);
+                setPower(4, p1, p2);
             }
             continue;
         }
-        if (i==9) {
+        if (i == 9) {
             p1 = (int)strtol((char *)argv[i+2],NULL,10) *8;
             if (p1)
                 isUnloadOnEnd = false;
@@ -766,14 +768,15 @@ int setoffsetdaemons(int argc,const char * argv[])
 
         int offset = (int)strtol((char *)argv[i+2],NULL,10);
 
-        if (readOCMailBox(i)!=offset) {
+        if (readOCMailBox(i) != offset) {
             writeOCMailBox(i, offset);
         }
     }
-    return(0);
+
+    return (0);
 }
 
-int setoffset(int argc,const char * argv[])
+int setoffset(int argc, const char * argv[])
 {
     long cpu_offset = 0;
     long gpu_offset = 0;
@@ -785,70 +788,70 @@ int setoffset(int argc,const char * argv[])
     if (argc >= 3) {
         cpu_offset = strtol((char *)argv[2],NULL,10);
 
-        if (argc >=4)
+        if (argc >= 4)
             gpu_offset = strtol((char *)argv[3],NULL,10);
-        if (argc >=5)
+        if (argc >= 5)
             cpuccache_offset = strtol((char *)argv[4],NULL,10);
-        if (argc >=6)
+        if (argc >= 6)
             systemagency_offset = strtol((char *)argv[5],NULL,10);
-        if (argc >=7)
+        if (argc >= 7)
             analogy_offset = strtol((char *)argv[6],NULL,10);
-        if (argc >=8)
+        if (argc >= 8)
             digitalio_offset = strtol((char *)argv[7],NULL,10);
     }
     else {
         usage(argv[0]);
-        return(1);
+        return (1);
     }
 
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
     printf("VoltageShift offset Tool\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 
     if (argc >= 3)
-        printf("Before CPU voltageoffset: %dmv\n",readOCMailBox(0));
+        printf("Before CPU voltageoffset: %dmv\n", readOCMailBox(0));
     if (argc >= 4)
-        printf("Before GPU voltageoffset: %dmv\n",readOCMailBox(1));
+        printf("Before GPU voltageoffset: %dmv\n", readOCMailBox(1));
     if (argc >= 5)
-        printf("Before CPU Cache: %dmv\n",readOCMailBox(2));
+        printf("Before CPU Cache: %dmv\n", readOCMailBox(2));
     if (argc >= 6)
-        printf("Before System Agency: %dmv\n",readOCMailBox(3));
+        printf("Before System Agency: %dmv\n", readOCMailBox(3));
     if (argc >= 7)
-        printf("Before Analogy I/O: %dmv\n",readOCMailBox(4));
+        printf("Before Analogy I/O: %dmv\n", readOCMailBox(4));
     if (argc >= 8)
-        printf("Before Digital I/O: %dmv\n",readOCMailBox(5));
+        printf("Before Digital I/O: %dmv\n", readOCMailBox(5));
 
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 
     if (argc >= 3)
-        writeOCMailBox(0, (int)cpu_offset);
+        writeOCMailBox(0,(int)cpu_offset);
     if (argc >= 4)
-        writeOCMailBox(1, (int)gpu_offset);
+        writeOCMailBox(1,(int)gpu_offset);
     if (argc >= 5)
-        writeOCMailBox(2, (int)cpuccache_offset);
+        writeOCMailBox(2,(int)cpuccache_offset);
     if (argc >= 6)
-        writeOCMailBox(3, (int)systemagency_offset);
+        writeOCMailBox(3,(int)systemagency_offset);
     if (argc >= 7)
-        writeOCMailBox(4,(int) analogy_offset);
+        writeOCMailBox(4,(int)analogy_offset);
     if (argc >= 8)
-        writeOCMailBox(5, (int)digitalio_offset);
+        writeOCMailBox(5,(int)digitalio_offset);
 
     if (argc >= 3)
-        printf("After CPU voltageoffset: %dmv\n",readOCMailBox(0));
+        printf("After CPU voltageoffset: %dmv\n", readOCMailBox(0));
     if (argc >= 4)
-        printf("After GPU voltageoffset: %dmv\n",readOCMailBox(1));
+        printf("After GPU voltageoffset: %dmv\n", readOCMailBox(1));
     if (argc >= 5)
-        printf("After CPU Cache: %dmv\n",readOCMailBox(2));
+        printf("After CPU Cache: %dmv\n", readOCMailBox(2));
     if (argc >= 6)
-        printf("After System Agency: %dmv\n",readOCMailBox(3));
+        printf("After System Agency: %dmv\n", readOCMailBox(3));
     if (argc >= 7)
-        printf("After Analogy I/O: %dmv\n",readOCMailBox(4));
+        printf("After Analogy I/O: %dmv\n", readOCMailBox(4));
     if (argc >= 8)
-        printf("After Digital I/O: %dmv\n",readOCMailBox(5));
+        printf("After Digital I/O: %dmv\n", readOCMailBox(5));
 
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 
-    return(0);
+    return (0);
 }
 
 
@@ -866,7 +869,7 @@ void unloadkext()
         IOObjectRelease(service);
 
     std::stringstream output;
-    output << "sudo kextunload -q -b "
+    output << "sudo kextunload -q -b"
     << "com.sicreative.VoltageShift"
     << " " ;
     system(output.str().c_str());
@@ -877,112 +880,112 @@ void loadkext()
     isUnloadOnEnd = true;
 
     std::stringstream output;
-    output << "sudo kextutil -q -r ./  -b "
+    output << "sudo kextutil -q -r ./ -b"
     << "com.sicreative.VoltageShift"
-    << " " ;
+    << " ";
     system(output.str().c_str());
     output.str("");
-    output << "sudo kextutil -q -r /Library/Application\\ Support/VoltageShift/ -b "
+    output << "sudo kextutil -q -r /Library/Application\\ Support/VoltageShift/ -b"
     << "com.sicreative.VoltageShift"
-    << " " ;
+    << " ";
     system(output.str().c_str());
 }
 
 void removeLaunchDaemons()
 {
     std::stringstream output;
-    output.str("sudo rm /Library/LaunchDaemons/com.sicreative.VoltageShift.plist ");
+    output.str("sudo rm -rf /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
     system(output.str().c_str());
-    output.str("sudo rm -R /Library/Application\\ Support/VoltageShift/ ");
+    output.str("sudo rm -rf /Library/Application\\ Support/VoltageShift");
     system(output.str().c_str());
 
     // Check process of build sucessful
-    int error  = 0;
+    int error = 0;
 
-    FILE *fp = popen("sudo ls /Library/LaunchDaemons/com.sicreative.VoltageShift.plist","r");
+    FILE *fp = popen("sudo ls /Library/LaunchDaemons/com.sicreative.VoltageShift.plist", "r");
     if (fp != NULL) {
-        char str [255] ;
+        char str [255];
         while (fgets(str, 255, fp) != NULL) {
             printf("%s", str);
-            if (strstr(str,"/Library/LaunchDaemons/com.sicreative.VoltageShift.plist")!=NULL) {
-                error ++;
+            if (strstr(str, "/Library/LaunchDaemons/com.sicreative.VoltageShift.plist") != NULL) {
+                error++;
             }
         }
         pclose(fp);
     }
 
-    fp = popen("sudo ls /Library/Application\\ Support/VoltageShift/","r");
+    fp = popen("sudo ls /Library/Application\\ Support/VoltageShift/", "r");
     if (fp != NULL) {
-        char str [255] ;
+        char str [255];
         while (fgets(str, 255, fp) != NULL) {
             printf("%s", str);
-            if (strstr(str,"VoltageShift.kext")!=NULL) {
-                error ++;
+            if (strstr(str, "VoltageShift.kext") != NULL) {
+                error++;
                 continue;
             }
-            if (strstr(str,"voltageshift")!=NULL) {
-                error ++;
+            if (strstr(str, "voltageshift") != NULL) {
+                error++;
             }
         }
         pclose(fp);
     }
     // Error Messages
     if (error != 0) {
-        printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        printf("--------------------------------------------------------------------------\n");
+        printf("\n\n\n\n\n");
+        printf("------------------------------------------------------------------------\n");
         printf("VoltageShift remove Launchd daemons Tool\n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("    Can't Remove the launchd.  No Sucessful of delete the files,\n\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("Can't Remove the launchd. No Sucessful of delete the files,\n");
         printf("or manual delete by:\n");
-        printf("      sudo rm /Library/LaunchDaemons/com.sicreative.VoltageShift.plist\n ");
-        printf("      sudo rm -R /Library/Application\\ Support/VoltageShift \n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("--------------------------------------------------------------------------\n");
+        printf("sudo rm -rf /Library/LaunchDaemons/com.sicreative.VoltageShift.plist\n");
+        printf("sudo rm -rf /Library/Application\\ Support/VoltageShift\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------\n");
 
-        return ;
+        return;
     }
 
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("\n\n\n\n\n");
+    printf("------------------------------------------------------------------------\n");
     printf("VoltageShift remove Launchd daemons Tool\n");
-    printf("--------------------------------------------------------------------------\n");
-    printf("    Sucessed Full remove the Launchd daemons\n");
-    printf("    Fully Switch off (no reboot) for the system back to \n        non-undervoltage status\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
+    printf("Sucessed Full remove the Launchd daemons\n");
+    printf("Fully Switch off (no reboot) for the system back to non-undervoltage status\n");
+    printf("------------------------------------------------------------------------\n");
     printf("Don't forget enable the CSR protect by following methond:\n");
-    printf("1. Boot start by Command-R to recovery mode :\n");
-    printf("2. In \"Terminal\" >> csrutil enable  \n");
-    printf("--------------------------------------------------------------------------\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("1. Boot start by Command-R to recovery mode:\n");
+    printf("2. In \"Terminal\" >> csrutil enable\n");
+    printf("------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 }
 
-void writeLaunchDaemons(std::vector<int>  values = {0},int min = 160)
+void writeLaunchDaemons(std::vector<int>values = {0}, int min = 160)
 {
     std::stringstream output;
 
-    if (min>720) {
-        printf("------------------------------------\n");
-        printf("Out of Interval setting, please select between 0 (Run only bootup) to 720mins \n");
-        printf("------------------------------------\n");
+    if (min > 720) {
+        printf("------------------------------------------------------------------------\n");
+        printf("Out of Interval setting, please select between 0 (Run only bootup) to 720mins\n");
+        printf("------------------------------------------------------------------------\n");
 
         return;
     }
 
     printf("Build for LaunchDaemons of Auto Apply for VoltageShift\n");
-    printf("------------------------------------\n");
-    output.str("sudo rm -R /Library/Application\\ Support/VoltageShift/");
-    output.str("sudo rm /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
+    printf("------------------------------------------------------------------------\n");
+    output.str("sudo rm -rf /Library/Application\\ Support/VoltageShift");
+    output.str("sudo rm -rf /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
     system(output.str().c_str());
     output.str("");
     //add 0 for no user input field
-    for (int i=(int)values.size();i<=5;i++) {
+    for (int i = (int)values.size(); i <= 5; i++) {
         values.push_back(0);
     }
 
     output << "sudo echo \""
     << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     << "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
-    <<  "<plist version=\"1.0\">"
+    << "<plist version=\"1.0\">"
     << "<dict>"
     << "<key>RunAtLoad</key><true/>"
     << "<key>Label</key>"
@@ -992,19 +995,19 @@ void writeLaunchDaemons(std::vector<int>  values = {0},int min = 160)
     << "<string>/Library/Application Support/VoltageShift/voltageshift</string>"
     << "<string>offsetdaemons</string>";
 
-    for (int i=0;i<values.size();i++) {
+    for (int i = 0; i < values.size(); i++) {
         output << "<string>"
         << values[i]
         << "</string>";
     }
     output << "</array>";
 
-    if (min>0) {
+    if (min > 0) {
         output << "<key>StartCalendarInterval</key>"
         << "<array>";
-        if (min<=60 && 60%min==0) {
-            for (int i=0;i<60;i+=min) {
-                output  << "<dict>"
+        if (min <= 60 && 60%min == 0) {
+            for (int i = 0; i < 60; i += min) {
+                output << "<dict>"
                 << "<key>Minute</key>"
                 << "<integer>"
                 << i
@@ -1013,8 +1016,8 @@ void writeLaunchDaemons(std::vector<int>  values = {0},int min = 160)
             }
         }
         else {
-            for (int i=0;i<1440;i+=min) {
-                output  << "<dict>"
+            for (int i = 0; i < 1440; i += min) {
+                output << "<dict>"
                 << "<key>Hour</key>"
                 << "<integer>"
                 << i/60
@@ -1033,111 +1036,112 @@ void writeLaunchDaemons(std::vector<int>  values = {0},int min = 160)
     << "\" > /Library/LaunchDaemons/com.sicreative.VoltageShift.plist"
     << " ";
     system(output.str().c_str());
-    output.str("sudo chown root:wheel /Library/LaunchDaemons/com.sicreative.VoltageShift.plist ");
+    output.str("sudo chown root:wheel /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
     system(output.str().c_str());
-    output.str("sudo mkdir  /Library/Application\\ Support/VoltageShift/ ");
+    output.str("sudo mkdir /Library/Application\\ Support/VoltageShift");
     system(output.str().c_str());
-    output.str("sudo cp  -R ./VoltageShift.kext /Library/Application\\ Support/VoltageShift/ ");
+    output.str("sudo cp -R ./VoltageShift.kext /Library/Application\\ Support/VoltageShift/");
     system(output.str().c_str());
-    output.str("sudo cp  ./voltageshift /Library/Application\\ Support/VoltageShift/ ");
+    output.str("sudo cp ./voltageshift /Library/Application\\ Support/VoltageShift/");
     system(output.str().c_str());
-    output.str("sudo chown  -R root:wheel /Library/Application\\ Support/VoltageShift/VoltageShift.kext ");
+    output.str("sudo chown -R root:wheel /Library/Application\\ Support/VoltageShift/VoltageShift.kext");
     system(output.str().c_str());
-    output.str("sudo chown  root:wheel /Library/Application\\ Support/VoltageShift/voltageshift ");
+    output.str("sudo chmod 755 /Library/Application\\ Support/VoltageShift/voltageshift");
+    system(output.str().c_str());
+    output.str("sudo chown root:wheel /Library/Application\\ Support/VoltageShift/voltageshift");
     system(output.str().c_str());
 
     // Check process of build sucessful
-    int error  = 3;
+    int error = 3;
 
-    FILE *fp = popen("sudo ls /Library/LaunchDaemons/com.sicreative.VoltageShift.plist","r");
+    FILE *fp = popen("sudo ls /Library/LaunchDaemons/com.sicreative.VoltageShift.plist", "r");
     if (fp != NULL) {
-        char str [255] ;
+        char str [255];
         while (fgets(str, 255, fp) != NULL) {
             printf("%s", str);
-            if (strstr(str,"/Library/LaunchDaemons/com.sicreative.VoltageShift.plist")!=NULL) {
-                error --;
+            if (strstr(str, "/Library/LaunchDaemons/com.sicreative.VoltageShift.plist") != NULL) {
+                error--;
             }
         }
         pclose(fp);
     }
 
-    fp = popen("sudo ls /Library/Application\\ Support/VoltageShift/","r");
+    fp = popen("sudo ls /Library/Application\\ Support/VoltageShift/", "r");
     if (fp != NULL) {
-        char str [255] ;
+        char str [255];
         while (fgets(str, 255, fp) != NULL) {
             printf("%s", str);
 
-            if (strstr(str,"VoltageShift.kext")!=NULL) {
-                error --;
+            if (strstr(str, "VoltageShift.kext") != NULL) {
+                error--;
                 continue;
             }
-            if (strstr(str,"voltageshift")!=NULL) {
-                error --;
+            if (strstr(str, "voltageshift") != NULL) {
+                error--;
             }
-
         }
         pclose(fp);
     }
     // Error Messages
     if (error != 0) {
-        printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        printf("--------------------------------------------------------------------------\n");
+        printf("\n\n\n\n\n");
+        printf("------------------------------------------------------------------------\n");
         printf("VoltageShift builddaemons Tool\n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("    Can't build the launchd.  Can´t create the files, please use:\n\n");
-        printf("             sudo ./voltageshift buildlaunchd .... \n\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("Can't build the launchd. Can´t create the files, please use:\n");
+        printf("sudo ./voltageshift buildlaunchd ....\n");
         printf("for Root privilege.\n");
-        printf("--------------------------------------------------------------------------\n");
-        printf("--------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------\n");
 
-        return ;
+        return;
     }
     // Sucess and Caution Messages
     printf("\n\n\n\n\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
     printf("VoltageShift builddaemons Tool\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
     printf("Finished installing the LaunchDaemons, Please Reboot\n\n");
-    printf("--------------------------------------------------------------------------\n");
-    printf("The system will apply the below undervoltage setting \n values for boot, and Amend every %d mins\n", min);
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
+    printf("The system will apply the below undervoltage setting values for boot, and Amend every %d mins\n", min);
+    printf("------------------------------------------------------------------------\n");
     printf("************************************************************************\n");
-    printf("Please CONFIRM and TEST the system STABILITY in the below settings, \n otherwise REMOVE this launchd IMMEDIATELY \n");
-    printf("You can remove this by using: ./voltageshift removelaunchd\n ");
+    printf("Please CONFIRM and TEST the system STABILITY in the below settings, otherwise REMOVE this launchd IMMEDIATELY\n");
+    printf("You can remove this by using: ./voltageshift removelaunchd\n");
     printf("Or manual remove by:\n");
-    printf("sudo rm /Library/LaunchDaemons/com.sicreative.VoltageShift.plist\n ");
-    printf("sudo rm -R /Library/Application\\ Support/VoltageShift \n");
-    printf("--------------------------------------------------------------------------\n");
-    printf("CPU             %d %s mv\n",values[0],values[0]>0?"!!!!!":"");
-    printf("GPU             %d %s mv\n",values[1],values[1]>0?"!!!!!":"");
-    printf("CPU Cache       %d %s mv\n",values[2],values[2]>0?"!!!!!":"");
-    printf("System Agency   %d %s mv\n",values[3],values[3]>0?"!!!!!":"");
-    printf("Analog IO       %d %s mv\n",values[4],values[4]>0?"!!!!!":"");
-    printf("Digital IO       %d %s mv\n",values[5],values[5]>0?"!!!!!":"");
+    printf("sudo rm -rf /Library/LaunchDaemons/com.sicreative.VoltageShift.plist\n");
+    printf("sudo rm -rf /Library/Application\\ Support/VoltageShift\n");
+    printf("------------------------------------------------------------------------\n");
+    printf("CPU             %d %s mv\n", values[0], values[0] > 0 ? "!!!!!":"");
+    printf("GPU             %d %s mv\n", values[1], values[1] > 0 ? "!!!!!":"");
+    printf("CPU Cache       %d %s mv\n", values[2], values[2] > 0 ? "!!!!!":"");
+    printf("System Agency   %d %s mv\n", values[3], values[3] > 0 ? "!!!!!":"");
+    printf("Analog IO       %d %s mv\n", values[4], values[4] > 0 ? "!!!!!":"");
+    printf("Digital IO      %d %s mv\n", values[5], values[5] > 0 ? "!!!!!":"");
 
-    if (values.size()>=7 && values[6]>=0)
-        printf("Turbo              %s \n",values[6]>0?"Enable":"Disable");
-    if (values.size()>=9 && values[7]>=0 && values[8]>=0)
-        printf("Power            %d  %d  \n",values[7],values[8]);
-    if (values.size()>=10 && values[9]>=0)
-        printf("The kext will %sremain on System when unload  \n",values[9]>0?"":"not ");
+    if (values.size() >= 7 && values[6] >= 0)
+        printf("Turbo              %s \n", values[6] > 0 ? "Enable":"Disable");
+    if (values.size() >= 9 && values[7] >= 0 && values[8] >= 0)
+        printf("Power            %d  %d  \n", values[7], values[8]);
+    if (values.size() >= 10 && values[9] >= 0)
+        printf("The kext will %sremain on System when unload\n", values[9] > 0 ? "":"not");
     // End Messages
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
     printf("************************************************************************\n");
     printf("Please notice if you cannot boot the system after installing, you need to:\n");
     printf("1. Fully turn off Computer (not reboot):\n");
-    printf("2. Boot start by Command-R to recovery mode :\n");
-    printf("3. In \"Terminal\" Enable the CSR protection to stop undervoltage running when boot \n");
-    printf("4.       csrutil enable    \n");
+    printf("2. Boot start by Command-R to recovery mode:\n");
+    printf("3. In \"Terminal\" Enable the CSR protection to stop undervoltage running when boot\n");
+    printf("4. csrutil enable\n");
     printf("5. Reboot and Remove all file above\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 }
 
 void intHandler(int sig)
 {
     char c;
     signal(sig, SIG_IGN);
-    printf("\n quit? [y/n] ");
+    printf("\n quit? [y/n]");
     c = getchar();
     if (c == 'y' || c == 'Y') {
         unloadkext();
@@ -1153,11 +1157,11 @@ int main(int argc, const char * argv[])
 {
 #if TARGET_CPU_ARM64
     printf("\n\n\n\n\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
     printf("VoltageShift Not supported for ARM (Apple Silicon)\n");
-    printf("--------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 
-    return(1);
+    return (1);
 #endif // TARGET_CPU_ARM64
 
     char * parameter;
@@ -1170,7 +1174,7 @@ int main(int argc, const char * argv[])
     }
     else {
         usage(argv[0]);
-        return(1);
+        return (1);
     }
 
     int count = 0;
@@ -1197,30 +1201,30 @@ int main(int argc, const char * argv[])
     }
 
     if (!strncmp(parameter, "info", 4)) {
-        printf("------------------------------------------------------\n");
-        printf("   VoltageShift Info Tool\n");
-        printf("------------------------------------------------------\n");
-        printf("CPU voltage offset: %dmv\n",readOCMailBox(0));
-        printf("GPU voltage offset: %dmv\n",readOCMailBox(1));
-        printf("CPU Cache voltage offset: %dmv\n",readOCMailBox(2));
-        printf("System Agency offset: %dmv\n",readOCMailBox(3));
-        printf("Analogy I/O: %dmv\n",readOCMailBox(4));
-        printf("Digital I/O: %dmv\n",readOCMailBox(5));
+        printf("------------------------------------------------------------------------\n");
+        printf("VoltageShift Info Tool\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("CPU voltage offset: %dmv\n", readOCMailBox(0));
+        printf("GPU voltage offset: %dmv\n", readOCMailBox(1));
+        printf("CPU Cache voltage offset: %dmv\n", readOCMailBox(2));
+        printf("System Agency offset: %dmv\n", readOCMailBox(3));
+        printf("Analogy I/O: %dmv\n", readOCMailBox(4));
+        printf("Digital I/O: %dmv\n", readOCMailBox(5));
         showcpuinfo();
         printf("\n");
     }
     else if (!strncmp(parameter, "mon", 3)) {
-        printf("------------------------------------------------------\n");
-        printf("   VoltageShift Monitor Tool\n");
-        printf("------------------------------------------------------\n");
-        printf("    Ctl-C to Exit\n\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("VoltageShift Monitor Tool\n");
+        printf("------------------------------------------------------------------------\n");
+        printf("Ctl-C to Exit\n\n");
         signal(SIGINT, intHandler);
-        printf("   CPU voltage offset: %dmv\n",readOCMailBox(0));
-        printf("   GPU voltage offset: %dmv\n",readOCMailBox(1));
-        printf("   CPU Cache voltage offset: %dmv\n",readOCMailBox(2));
-        printf("   System Agency offset: %dmv\n",readOCMailBox(3));
-        printf("   Analogy I/O: %dmv\n",readOCMailBox(4));
-        printf("   Digital I/O: %dmv\n\n",readOCMailBox(5));
+        printf("CPU voltage offset: %dmv\n", readOCMailBox(0));
+        printf("GPU voltage offset: %dmv\n", readOCMailBox(1));
+        printf("CPU Cache voltage offset: %dmv\n", readOCMailBox(2));
+        printf("System Agency offset: %dmv\n", readOCMailBox(3));
+        printf("Analogy I/O: %dmv\n", readOCMailBox(4));
+        printf("Digital I/O: %dmv\n\n", readOCMailBox(5));
         //   domain : 0 - CPU
         //            1 - GPU
         //            2 - CPU Cache
@@ -1233,7 +1237,7 @@ int main(int argc, const char * argv[])
                 printf("\r");
                 sleep(1);
 
-                for (int i=0;i<5;i++) {
+                for (int i = 0; i < 5; i++) {
                     sleep(1);
                     loadkext();
                     service = getService();
@@ -1242,7 +1246,7 @@ int main(int argc, const char * argv[])
                     ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
                     if (ret != KERN_SUCCESS) {
                         printf("Couldn't open IO Service\n");
-                        if (i==4)
+                        if (i == 4)
                             return (1);
                     }
                     else {
@@ -1257,14 +1261,14 @@ int main(int argc, const char * argv[])
         while (true);
     }
     else if (!strncmp(parameter, "--damage", 8)) {
-        if (argc >=2) {
+        if (argc >= 2) {
             if (!strncmp((char *)argv[2], "offset", 6)) {
                 damagemode = true;
 
                 std::vector<std::string> arg;
                 arg.push_back(argv[0]);
 
-                for (int i=1; i<argc-1;i++) {
+                for (int i = 1; i < argc-1; i++) {
                     arg.push_back(argv[i+1]);
                 }
 
@@ -1273,7 +1277,7 @@ int main(int argc, const char * argv[])
                 for (int i = 0; i < arg.size(); ++i)
                     arrayOfCstrings[i] = arg[i].c_str();
 
-                setoffset(argc-1,arrayOfCstrings);
+                setoffset(argc-1, arrayOfCstrings);
             }
             else if (!strncmp((char *)argv[2], "offsetdaemons", 6)) {
                 damagemode = true;
@@ -1281,7 +1285,7 @@ int main(int argc, const char * argv[])
                 std::vector<std::string> arg;
                 arg.push_back(argv[0]);
 
-                for (int i=1; i<argc-1;i++) {
+                for (int i = 1; i < argc-1; i++) {
                     arg.push_back(argv[i+1]);
                 }
 
@@ -1290,7 +1294,7 @@ int main(int argc, const char * argv[])
                 for (int i = 0; i < arg.size(); ++i)
                     arrayOfCstrings[i] = arg[i].c_str();
 
-                setoffsetdaemons(argc-1,arrayOfCstrings);
+                setoffsetdaemons(argc-1, arrayOfCstrings);
             }
             else {
                 usage(argv[0]);
@@ -1312,44 +1316,44 @@ int main(int argc, const char * argv[])
     else if (!strncmp(parameter, "buildlaunchd", 12)) {
         std::vector<int> arg;
 
-        if (argc >=3)
+        if (argc >= 3)
             arg.push_back((int)strtol((char *)argv[2],NULL,10));
-        if (argc >=4)
+        if (argc >= 4)
             arg.push_back((int)strtol((char *)argv[3],NULL,10));
-        if (argc >=5)
+        if (argc >= 5)
             arg.push_back((int)strtol((char *)argv[4],NULL,10));
-        if (argc >=6)
+        if (argc >= 6)
             arg.push_back((int)strtol((char *)argv[5],NULL,10));
-        if (argc >=7)
+        if (argc >= 7)
             arg.push_back((int)strtol((char *)argv[6],NULL,10));
-        if (argc >=8)
+        if (argc >= 8)
             arg.push_back((int)strtol((char *)argv[7],NULL,10));
-        if (argc >=9)
+        if (argc >= 9)
             arg.push_back((int)strtol((char *)argv[8],NULL,10));
-        if (argc >=10)
+        if (argc >= 10)
             arg.push_back((int)strtol((char *)argv[9],NULL,10));
-        if (argc >=11)
+        if (argc >= 11)
             arg.push_back((int)strtol((char *)argv[10],NULL,10));
-        if (argc >=12)
+        if (argc >= 12)
             arg.push_back((int)strtol((char *)argv[11],NULL,10));
         // Write LaunchDaemons
-        if (argc >=13)
+        if (argc >= 13)
             writeLaunchDaemons(arg,(int)strtol((char *)argv[12],NULL,10));
         else {
             writeLaunchDaemons(arg);
         }
     }
     else if (!strncmp(parameter, "offsetdaemons", 12)) {
-        setoffsetdaemons(argc,argv);
+        setoffsetdaemons(argc, argv);
     }
     else if (!strncmp(parameter, "offset", 6)) {
-        setoffset(argc,argv);
+        setoffset(argc, argv);
     }
     else if (!strncmp(parameter, "turbo", 5)) {
-        setTurbo(argc,argv);
+        setTurbo(argc, argv);
     }
     else if (!strncmp(parameter, "power", 5)) {
-        setPower(argc,argv);
+        setPower(argc, argv);
     }
     else if (!strncmp(parameter, "read", 4)) {
         inout in;
@@ -1384,7 +1388,7 @@ int main(int argc, const char * argv[])
     else if (!strncmp(parameter, "write", 5)) {
         if (argc < 4) {
             usage(argv[0]);
-            return(1);
+            return (1);
         }
 
         inout in;
@@ -1409,7 +1413,7 @@ int main(int argc, const char * argv[])
     }
     else {
         usage(argv[0]);
-        return(1);
+        return (1);
     }
 
     if (connect) {

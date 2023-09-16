@@ -12,7 +12,7 @@
 		AB1B032317E25FFA00DD337E /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = ABC74F2B1798553700B182E7 /* main.mm */; };
 		AB47DDBA17E2893200840FD1 /* VoltageShfitAnVMSR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABC74F0A17983B9900B182E7 /* VoltageShfitAnVMSR.cpp */; };
 		ABC74F0817983B9900B182E7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = ABC74F0617983B9900B182E7 /* InfoPlist.strings */; };
-		CDC159DB2AA76BE800AD1B10 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDC159DA2AA76BE800AD1B10 /* libkmod.a */; };
+		CD7A6C762AB4A5CA00B90795 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD7A6C752AB4A5CA00B90795 /* libkmod.a */; };
 		CDE51A292AA765ED0022F6DC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDE51A282AA765ED0022F6DC /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +40,7 @@
 		ABC74F0A17983B9900B182E7 /* VoltageShfitAnVMSR.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VoltageShfitAnVMSR.cpp; sourceTree = "<group>"; };
 		ABC74F0C17983B9900B182E7 /* VoltageShift-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VoltageShift-Prefix.pch"; sourceTree = "<group>"; };
 		ABC74F2B1798553700B182E7 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		CDC159DA2AA76BE800AD1B10 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
+		CD7A6C752AB4A5CA00B90795 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		CDE51A282AA765ED0022F6DC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -58,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDC159DB2AA76BE800AD1B10 /* libkmod.a in Frameworks */,
+				CD7A6C762AB4A5CA00B90795 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +88,7 @@
 		ABC74F0017983B9900B182E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CDC159DA2AA76BE800AD1B10 /* libkmod.a */,
+				CD7A6C752AB4A5CA00B90795 /* libkmod.a */,
 				CDE51A282AA765ED0022F6DC /* IOKit.framework */,
 				AB1B031617E25FC000DD337E /* Foundation.framework */,
 				ABC74F0117983B9900B182E7 /* Other Frameworks */,

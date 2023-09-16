@@ -4,52 +4,53 @@
 
 #define super IOService
 
-OSDefineMetaClassAndStructors (VoltageShiftAnVMSR, IOService)
+OSDefineMetaClassAndStructors(VoltageShiftAnVMSR, IOService)
 
-bool VoltageShiftAnVMSR::init (OSDictionary *dict)
+bool VoltageShiftAnVMSR::init(OSDictionary *dict)
 {
-    bool res = super::init (dict);
+    bool res = super::init(dict);
 
 #ifdef DEBUG
-    IOLog ("VoltageShiftAnVMSR: Initializing...\n");
+    IOLog("VoltageShiftAnVMSR: Initializing...\n");
 #endif // DEBUG
 
-    return(res);
+    return (res);
 }
 
-void VoltageShiftAnVMSR::free ()
+void VoltageShiftAnVMSR::free()
 {
 #ifdef DEBUG
-    IOLog ("VoltageShiftAnVMSR: Freeing...\n");
+    IOLog("VoltageShiftAnVMSR: Freeing...\n");
 #endif // DEBUG
 
-    super::free ();
+    super::free();
 }
 
-bool VoltageShiftAnVMSR::start (IOService *provider)
+bool VoltageShiftAnVMSR::start(IOService *provider)
 {
-    bool res = super::start (provider);
+    bool res = super::start(provider);
 
     registerService();
-    IOLog ("VoltageShiftAnVMSR: Starting...\n");
+    IOLog("VoltageShiftAnVMSR: Starting...\n");
 
     mPrefPanelMemoryBufSize = 4096;
 
-    return(res);
+    return (res);
 }
 
-void VoltageShiftAnVMSR::stop (IOService *provider)
+void VoltageShiftAnVMSR::stop(IOService *provider)
 {
-    IOLog ("AnVMSR: Stopping...\n");
-    super::stop (provider);
+    IOLog("AnVMSR: Stopping...\n");
+
+    super::stop(provider);
 }
 
-uint64_t VoltageShiftAnVMSR::a_rdmsr (uint32_t msr)
+uint64_t VoltageShiftAnVMSR::a_rdmsr(uint32_t msr)
 {
 #if TARGET_CPU_ARM64
-    return(0);
+    return (0);
 #elif TARGET_CPU_X86_64
-    return(rdmsr64(msr));
+    return (rdmsr64(msr));
 #endif // TARGET_CPU_ARM64
 }
 
@@ -75,7 +76,7 @@ IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID
 {
 #if TARGET_CPU_ARM64
     IOLog("VoltageShiftAnVMSR: is not supported for Apple Silicon (ARM64)\n");
-    return(kIOReturnError);
+    return (kIOReturnError);
 #endif // TARGET_CPU_ARM64
 
     IOReturn ioReturn = kIOReturnSuccess;
@@ -84,7 +85,7 @@ IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID
 
     if (mClientCount > MAXUSERS) {
         IOLog("VoltageShiftAnVMSR: Client already created, not deleted\n");
-        return(kIOReturnError);
+        return (kIOReturnError);
     }
 
     client = (AnVMSRUserClient *)AnVMSRUserClient::withTask(owningTask);
@@ -93,9 +94,8 @@ IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID
         ioReturn = kIOReturnNoResources;
         IOLog("VoltageShiftAnVMSR::newUserClient: Can't create user client\n");
     }
-
+    // Start the client so it can accept requests.
     if (ioReturn == kIOReturnSuccess) {
-        // Start the client so it can accept requests.
         client->attach(this);
         if (client->start(this) == false) {
             ioReturn = kIOReturnError;
@@ -124,7 +124,7 @@ IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID
     return (ioReturn);
 }
 
-void VoltageShiftAnVMSR::setErr( bool set )
+void VoltageShiftAnVMSR::setErr(bool set)
 {
     mErrFlag = set;
 }
@@ -140,14 +140,14 @@ void VoltageShiftAnVMSR::closeChild(AnVMSRUserClient *ptr)
     }
 
 #ifdef DEBUG
-    IOLog("Closing: %p\n",ptr);
+    IOLog("Closing: %p\n", ptr);
 
-    for (i=0;i<mClientCount;i++) {
+    for (i = 0; i < mClientCount; i++) {
         IOLog("userclient ref: %d %p\n", i, mClientPtr[i]);
     }
 #endif // DEBUG
 
-    for (i=0;i<mClientCount;i++) {
+    for (i = 0; i < mClientCount; i++) {
         if (mClientPtr[i] == ptr) {
             mClientCount--;
             mClientPtr[i] = NULL;
@@ -156,7 +156,7 @@ void VoltageShiftAnVMSR::closeChild(AnVMSRUserClient *ptr)
         }
     }
 
-    for (i=idx;i<mClientCount;i++) {
+    for (i = idx; i < mClientCount; i++) {
         mClientPtr[i] = mClientPtr[i+1];
     }
     mClientPtr[mClientCount+1] = NULL;
@@ -282,6 +282,7 @@ IOExternalMethod * AnVMSRUserClient::getTargetAndMethodForIndex(IOService **targ
     };
 
     *target = this;
+
     if (index < 3)
         return (IOExternalMethod *) (methodDescs + index);
 
@@ -300,6 +301,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
     if (!dataIn) {
         return kIOReturnUnsupported;
     }
+
     msrdata->param = mDevice->a_rdmsr(msrdata->msr);
 
 #ifdef DEBUG
@@ -309,6 +311,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
     if (!dataOut) {
         return kIOReturnUnsupported;
     }
+
     msroutdata->param = msrdata->param;
 
     return kIOReturnSuccess;
@@ -354,5 +357,5 @@ IOReturn AnVMSRUserClient::clientMemoryForType(UInt32 type, IOOptionBits *option
     // automatically released after memory is mapped into task
     *memory = memDesc;
 
-    return(kIOReturnSuccess);
+    return (kIOReturnSuccess);
 }
