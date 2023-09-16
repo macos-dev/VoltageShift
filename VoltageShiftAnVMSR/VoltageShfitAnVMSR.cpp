@@ -72,7 +72,7 @@ IOReturn VoltageShiftAnVMSR::runAction(UInt32 action, UInt32 *outSize, void **ou
     return kIOReturnSuccess;
 }
 
-IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID, UInt32 type, IOUserClient ** handler )
+IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID, UInt32 type, IOUserClient ** handler)
 {
 #if TARGET_CPU_ARM64
     IOLog("VoltageShiftAnVMSR: is not supported for Apple Silicon (ARM64)\n");

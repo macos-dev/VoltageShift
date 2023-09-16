@@ -17,7 +17,7 @@
 #define MAXENTRIES	500
 #define MAXUSERS 	5
 
-#define kMethodObjectUserClient ((IOService*) 0 )
+#define kMethodObjectUserClient ((IOService*) 0)
 
 enum
 {

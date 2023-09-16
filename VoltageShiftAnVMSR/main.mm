@@ -117,7 +117,7 @@ unsigned long long hex2int(const char *s)
 
 void printBits(size_t const size, void const * const ptr)
 {
-    unsigned char *b = (unsigned char*) ptr;
+    unsigned char *b = (unsigned char *) ptr;
     unsigned char byte;
     int i, j;
     printf("(");
@@ -1031,6 +1031,7 @@ void writeLaunchDaemons(std::vector<int>values = {0}, int min = 160)
     << "</plist>"
     << "\" > /Library/LaunchDaemons/com.sicreative.VoltageShift.plist"
     << " ";
+    // Write permissions and copy
     system(output.str().c_str());
     output.str("sudo chmod 644 /Library/LaunchDaemons/com.sicreative.VoltageShift.plist");
     system(output.str().c_str());
@@ -1117,9 +1118,9 @@ void writeLaunchDaemons(std::vector<int>values = {0}, int min = 160)
     printf("Digital IO      %d %s mv\n", values[5], values[5] > 0 ? "!!!!!":"");
 
     if (values.size() >= 7 && values[6] >= 0)
-        printf("Turbo              %s \n", values[6] > 0 ? "Enable":"Disable");
+        printf("Turbo   %s \n", values[6] > 0 ? "Enable":"Disable");
     if (values.size() >= 9 && values[7] >= 0 && values[8] >= 0)
-        printf("Power            %d  %d  \n", values[7], values[8]);
+        printf("Power   %d  %d  \n", values[7], values[8]);
     if (values.size() >= 10 && values[9] >= 0)
         printf("The kext will %sremain on System when unload\n", values[9] > 0 ? "":"not");
     // End Messages
