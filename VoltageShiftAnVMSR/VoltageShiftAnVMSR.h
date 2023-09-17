@@ -1,5 +1,5 @@
 //
-//  VoltageShift.h
+//  VoltageShiftAnVMSR.h
 //
 //  Created by SC Lee on 12/09/13.
 //  Copyright (c) 2017 SC Lee . All rights reserved.
@@ -8,6 +8,7 @@
 //
 //  This is licensed under the GNU General Public License v3.0
 //
+
 #include <mach/mach_types.h>
 #include <mach/machine.h>
 #include <pexpert/pexpert.h>
@@ -27,7 +28,7 @@
 #define MAXENTRIES 500
 #define MAXUSERS 5
 
-#define kMethodObjectUserClient ((IOService*)0)
+#define kMethodObjectUserClient ((IOService *)0)
 
 enum
 {
@@ -57,7 +58,6 @@ public:
     virtual uint64_t a_rdmsr(uint32_t msr);
     virtual void a_wrmsr(uint32_t msr, uint64_t value);
     virtual IOReturn runAction(UInt32 action, UInt32 *outSize, void **outData, void *extraArg);
-
     virtual IOReturn newUserClient(task_t owningTask, void *securityID, UInt32 type, IOUserClient **handler);
     virtual void setErr(bool set);
     virtual void closeChild(AnVMSRUserClient *ptr);
