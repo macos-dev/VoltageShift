@@ -4,4 +4,4 @@
 
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
-#endif // __OBJC__
+#endif /* __OBJC__ */

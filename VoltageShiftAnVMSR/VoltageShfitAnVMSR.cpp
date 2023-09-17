@@ -1,4 +1,13 @@
-// This is modified version of AnVMSR for MSR acress
+//
+//  VoltageShift.cpp
+//
+//  Created by SC Lee on 12/09/13.
+//  Copyright (c) 2017 SC Lee . All rights reserved.
+//
+//  MSR Kext Access modified from AnVMSR by Andy Vandijck Copyright (C) 2013 AnV Software
+//
+//  This is licensed under the GNU General Public License v3.0
+//
 
 #include "VoltageShiftAnVMSR.h"
 
@@ -12,7 +21,7 @@ bool VoltageShiftAnVMSR::init(OSDictionary *dict)
 
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR: Initializing...\n");
-#endif // DEBUG
+#endif /* DEBUG */
 
     return (res);
 }
@@ -21,7 +30,7 @@ void VoltageShiftAnVMSR::free()
 {
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR: Freeing...\n");
-#endif // DEBUG
+#endif /* DEBUG */
 
     super::free();
 }
@@ -51,7 +60,7 @@ uint64_t VoltageShiftAnVMSR::a_rdmsr(uint32_t msr)
     return (0);
 #elif TARGET_CPU_X86_64
     return (rdmsr64(msr));
-#endif // TARGET_CPU_ARM64
+#endif /* TARGET_CPU_ARM64 */
 }
 
 void VoltageShiftAnVMSR::a_wrmsr(uint32_t msr, uint64_t value)
@@ -60,24 +69,24 @@ void VoltageShiftAnVMSR::a_wrmsr(uint32_t msr, uint64_t value)
     return;
 #elif TARGET_CPU_X86_64
     wrmsr64(msr, value);
-#endif // TARGET_CPU_ARM64
+#endif /* TARGET_CPU_ARM64 */
 }
 
 IOReturn VoltageShiftAnVMSR::runAction(UInt32 action, UInt32 *outSize, void **outData, void *extraArg)
 {
 #ifdef DEBUG
     IOLog("Action: %x", (unsigned int)action);
-#endif // DEBUG
+#endif /* DEBUG */
 
     return kIOReturnSuccess;
 }
 
-IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID, UInt32 type, IOUserClient ** handler)
+IOReturn VoltageShiftAnVMSR::newUserClient(task_t owningTask, void *securityID, UInt32 type, IOUserClient **handler)
 {
 #if TARGET_CPU_ARM64
     IOLog("VoltageShiftAnVMSR: is not supported for Apple Silicon (ARM64)\n");
     return (kIOReturnError);
-#endif // TARGET_CPU_ARM64
+#endif /* TARGET_CPU_ARM64 */
 
     IOReturn ioReturn = kIOReturnSuccess;
 
@@ -119,7 +128,7 @@ IOReturn VoltageShiftAnVMSR::newUserClient( task_t owningTask, void * securityID
 
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR: newUserClient() client = %p\n", mClientPtr[mClientCount]);
-#endif // DEBUG
+#endif /* DEBUG */
 
     return (ioReturn);
 }
@@ -145,21 +154,21 @@ void VoltageShiftAnVMSR::closeChild(AnVMSRUserClient *ptr)
     for (i = 0; i < mClientCount; i++) {
         IOLog("userclient ref: %d %p\n", i, mClientPtr[i]);
     }
-#endif // DEBUG
+#endif /* DEBUG */
 
     for (i = 0; i < mClientCount; i++) {
         if (mClientPtr[i] == ptr) {
             mClientCount--;
             mClientPtr[i] = NULL;
             idx = i;
-            i = mClientCount+1;
+            i = mClientCount + 1;
         }
     }
 
     for (i = idx; i < mClientCount; i++) {
-        mClientPtr[i] = mClientPtr[i+1];
+        mClientPtr[i] = mClientPtr[i + 1];
     }
-    mClientPtr[mClientCount+1] = NULL;
+    mClientPtr[mClientCount + 1] = NULL;
 }
 
 #undef super
@@ -194,8 +203,8 @@ bool AnVMSRUserClient::set_Q_Size(UInt32 capacity)
 
 #ifdef DEBUG
     IOLog("AnVMSR: Reseting size of data queue, all data in queue is lost");
-#endif // DEBUG
-    //Get mem for new queue of calcuated size
+#endif /* DEBUG */
+    // Get mem for new queue of calcuated size
     return true;
 }
 
@@ -296,7 +305,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
 
 #ifdef DEBUG
     IOLog("AnVMSR RDMSR called\n");
-#endif // DEBUG
+#endif /* DEBUG */
 
     if (!dataIn) {
         return kIOReturnUnsupported;
@@ -306,7 +315,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
 
 #ifdef DEBUG
     IOLog("AnVMSR: RDMSR %X : 0x%llX\n", msrdata->msr, msrdata->param);
-#endif // DEBUG
+#endif /* DEBUG */
 
     if (!dataOut) {
         return kIOReturnUnsupported;
@@ -323,7 +332,7 @@ IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IO
 
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR WRMSR called\n");
-#endif // DEBUG
+#endif /* DEBUG */
 
     if (!dataIn) {
         return kIOReturnUnsupported;
@@ -333,7 +342,7 @@ IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IO
 
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR: WRMSR 0x%llX to %X\n", msrdata->param, msrdata->msr);
-#endif // DEBUG
+#endif /* DEBUG */
 
     return kIOReturnSuccess;
 }
