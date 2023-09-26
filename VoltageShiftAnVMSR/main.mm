@@ -229,7 +229,7 @@ int writeOCMailBox(int domain, int offset)
     return 0;
 }
 
-int readOCMailBox (int domain)
+int readOCMailBox(int domain)
 {
     // MSR 0x150 OC Mailbox 0x10 for read of voltage offset values
     uint64 value, cmd = OC_MAILBOX_READ_VOLTAGE_CMD;
