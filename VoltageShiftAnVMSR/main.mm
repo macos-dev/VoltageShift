@@ -17,6 +17,7 @@
 
 // SET TRUE WHEN YOUR SYSTEM REQUIRE OFFSET
 #define OFFSET_TEMP 0
+// #define DEBUG 1
 
 #define kAnVMSRClassName "VoltageShiftAnVMSR"
 
@@ -115,7 +116,7 @@ unsigned long long hex2int(const char *s)
     return strtoull(s, NULL, 16);
 }
 
-void printBits(size_t const size, void const * const ptr)
+void printBits(size_t const size, void const *const ptr)
 {
     unsigned char *b = (unsigned char *) ptr;
     unsigned char byte;
@@ -203,7 +204,6 @@ int writeOCMailBox(int domain, int offset)
     inout in;
     inout out;
     size_t outsize = sizeof(out);
-
     /* Issue favored core read command */
     value |= cmd << MSR_OC_MAILBOX_CMD_OFFSET;
      /* Domain for the values set for */
@@ -238,7 +238,6 @@ int readOCMailBox(int domain)
     inout in;
     inout out;
     size_t outsize = sizeof(out);
-
     /* Issue favored core read command */
     value = cmd << MSR_OC_MAILBOX_CMD_OFFSET;
     /* Domain for the values set for */
@@ -978,7 +977,7 @@ void writeLaunchDaemons(std::vector<int> values = {0}, int min = 160)
     for (int i = (int)values.size(); i <= 5; i++) {
         values.push_back(0);
     }
-
+    // Build .plist
     output << "sudo echo \""
     << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     << "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"

@@ -282,7 +282,7 @@
 				CODE_SIGN_STYLE = Manual;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "VoltageShiftAnVMSR/voltageshift-Prefix.pch";
+				GCC_PREFIX_HEADER = "VoltageShiftAnVMSR/VoltageShift-Prefix.pch";
 				GCC_VERSION = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -301,7 +301,7 @@
 				CODE_SIGN_STYLE = Manual;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "VoltageShiftAnVMSR/voltageshift-Prefix.pch";
+				GCC_PREFIX_HEADER = "VoltageShiftAnVMSR/VoltageShift-Prefix.pch";
 				GCC_VERSION = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
