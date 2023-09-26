@@ -119,7 +119,7 @@ void printBits(size_t const size, void const * const ptr)
 {
     unsigned char *b = (unsigned char *) ptr;
     unsigned char byte;
-    int i, j;
+    unsigned long int i, j;
     printf("(");
 
     for (i = size-1; i >= 0; i--) {
@@ -135,6 +135,7 @@ void printBits(size_t const size, void const * const ptr)
     }
 }
 
+//
 //  Read OC Mailbox
 //  Ref of Intel Turbo Boost Max Technology 3.0 legacy (non HWP) enumeration driver
 //  https://github.com/torvalds/linux/blob/master/drivers/platform/x86/intel_turbo_max_3.c
@@ -1296,7 +1297,7 @@ int main(int argc, const char *argv[])
             }
             else {
                 usage(argv[0]);
-                return(1);
+                return (1);
             }
         }
     }
@@ -1363,11 +1364,12 @@ int main(int argc, const char *argv[])
         in.param = 0;
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-        ret = IOConnectMethodStructureIStructureO(connect, AnVMSRActionMethodRDMSR,
-                                                  sizeof(in),   /* structureInputSize */
-                                                  &outsize,   /* structureOutputSize */
-                                                  &in,   /* inputStructure */
-                                                  &out);   /* ouputStructure */
+        ret = IOConnectMethodStructureIStructureO(connect,
+                                                  AnVMSRActionMethodRDMSR,
+                                                  sizeof(in), /* structureInputSize */
+                                                  &outsize, /* structureOutputSize */
+                                                  &in, /* inputStructure */
+                                                  &out); /* ouputStructure */
 #else
         ret = IOConnectCallStructMethod(connect,
                                         AnVMSRActionMethodRDMSR,
@@ -1416,8 +1418,7 @@ int main(int argc, const char *argv[])
 
     if (connect) {
         ret = IOServiceClose(connect);
-        if (ret != KERN_SUCCESS)
-        {
+        if (ret != KERN_SUCCESS) {
         }
     }
     if (service)

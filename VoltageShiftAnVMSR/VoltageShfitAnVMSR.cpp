@@ -286,8 +286,8 @@ void AnVMSRUserClient::stop(IOService *provider)
 IOExternalMethod * AnVMSRUserClient::getTargetAndMethodForIndex(IOService **target, UInt32 index)
 {
     static const IOExternalMethod methodDescs[3] = {
-        { NULL, (IOMethod) &AnVMSRUserClient::actionMethodRDMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize },
-        { NULL, (IOMethod) &AnVMSRUserClient::actionMethodWRMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize },
+        {NULL, (IOMethod) &AnVMSRUserClient::actionMethodRDMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize},
+        {NULL, (IOMethod) &AnVMSRUserClient::actionMethodWRMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize},
     };
 
     *target = this;
