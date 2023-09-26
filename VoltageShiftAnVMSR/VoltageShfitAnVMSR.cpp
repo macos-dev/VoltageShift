@@ -283,7 +283,7 @@ void AnVMSRUserClient::stop(IOService *provider)
 }
 
 // getTargetAndMethodForIndex looks up the external methods - supply a description of the parameters, available to be called
-IOExternalMethod * AnVMSRUserClient::getTargetAndMethodForIndex(IOService **target, UInt32 index)
+IOExternalMethod *AnVMSRUserClient::getTargetAndMethodForIndex(IOService **target, UInt32 index)
 {
     static const IOExternalMethod methodDescs[3] = {
         {NULL, (IOMethod) &AnVMSRUserClient::actionMethodRDMSR, kIOUCStructIStructO, kIOUCVariableStructureSize, kIOUCVariableStructureSize},
@@ -300,8 +300,8 @@ IOExternalMethod * AnVMSRUserClient::getTargetAndMethodForIndex(IOService **targ
 
 IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize)
 {
-    inout * msrdata = (inout *)dataIn;
-    inout * msroutdata = (inout *)dataOut;
+    inout *msrdata = (inout *)dataIn;
+    inout *msroutdata = (inout *)dataOut;
 
 #ifdef DEBUG
     IOLog("AnVMSR RDMSR called\n");
@@ -328,7 +328,7 @@ IOReturn AnVMSRUserClient::actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IO
 
 IOReturn AnVMSRUserClient::actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize)
 {
-    inout * msrdata = (inout *)dataIn;
+    inout *msrdata = (inout *)dataIn;
 
 #ifdef DEBUG
     IOLog("VoltageShiftAnVMSR WRMSR called\n");
