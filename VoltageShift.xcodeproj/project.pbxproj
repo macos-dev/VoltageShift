@@ -437,6 +437,20 @@
 				MARKETING_VERSION = 1.27;
 				MODULE_NAME = com.sicreative.VoltageShiftAnVMSR;
 				MODULE_VERSION = 1.27;
+				OTHER_CFLAGS = (
+					"-mmmx",
+					"-msse",
+					"-msse2",
+					"-msse3",
+					"-mfpmath=sse",
+					"-mssse3",
+					"-ftree-vectorize",
+					"-fno-non-call-exceptions",
+					"-fno-builtin",
+					"-fno-asynchronous-unwind-tables",
+					"-Wno-unknown-warning-option",
+					"-Wno-ossharedptr-misuse",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sicreative.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -468,6 +482,20 @@
 				MARKETING_VERSION = 1.27;
 				MODULE_NAME = com.sicreative.VoltageShiftAnVMSR;
 				MODULE_VERSION = 1.27;
+				OTHER_CFLAGS = (
+					"-mmmx",
+					"-msse",
+					"-msse2",
+					"-msse3",
+					"-mfpmath=sse",
+					"-mssse3",
+					"-ftree-vectorize",
+					"-fno-non-call-exceptions",
+					"-fno-builtin",
+					"-fno-asynchronous-unwind-tables",
+					"-Wno-unknown-warning-option",
+					"-Wno-ossharedptr-misuse",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sicreative.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
