@@ -17,27 +17,28 @@ jobs:
     env:
       JOB_TYPE: BUILD
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: acidanthera/MacKernelSDK
           path: MacKernelSDK
       - name: CI Bootstrap
         run: |
           src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
-      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Debug
-      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Release
+
+      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Debug -arch x86_64
+      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Release -arch x86_64
 
       - name: Upload to Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Artifacts
-          path: Build/Products/*/*.zip
+          path: build/*/*.zip
       - name: Upload to Release
         if: github.event_name == 'release'
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@e74ff71f7d8a4c4745b560a485cc5fdb9b5b999d
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: Build/Products/*/*.zip
+          file: build/*/*.zip
           tag: ${{ github.ref }}
           file_glob: true
