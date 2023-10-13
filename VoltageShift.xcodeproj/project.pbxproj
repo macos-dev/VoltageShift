@@ -16,16 +16,6 @@
 		CDE51A292AA765ED0022F6DC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDE51A282AA765ED0022F6DC /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CDD8F8252AD8E97B00B38A69 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ABC74EF317983B9900B182E7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = AB1B031317E25FC000DD337E;
-			remoteInfo = voltageshift;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		AB1B031217E25FC000DD337E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -188,7 +178,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				CDD8F8262AD8E97B00B38A69 /* PBXTargetDependency */,
 			);
 			name = VoltageShift;
 			productName = AnVMSR;
@@ -291,14 +280,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CDD8F8262AD8E97B00B38A69 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = AB1B031317E25FC000DD337E /* voltageshift */;
-			targetProxy = CDD8F8252AD8E97B00B38A69 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		ABC74F0617983B9900B182E7 /* InfoPlist.strings */ = {
