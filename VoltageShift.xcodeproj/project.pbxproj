@@ -16,6 +16,16 @@
 		CDE51A292AA765ED0022F6DC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDE51A282AA765ED0022F6DC /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CDD8F8252AD8E97B00B38A69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC74EF317983B9900B182E7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB1B031317E25FC000DD337E;
+			remoteInfo = voltageshift;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		AB1B031217E25FC000DD337E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -173,10 +183,12 @@
 				ABC74EFA17983B9900B182E7 /* Headers */,
 				ABC74EFB17983B9900B182E7 /* Resources */,
 				ABC74EFC17983B9900B182E7 /* Rez */,
+				CDA3240F2AD8E70200D7646C /* Archive */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CDD8F8262AD8E97B00B38A69 /* PBXTargetDependency */,
 			);
 			name = VoltageShift;
 			productName = AnVMSR;
@@ -240,6 +252,27 @@
 		};
 /* End PBXRezBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		CDA3240F2AD8E70200D7646C /* Archive */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Archive;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "cd \"${TARGET_BUILD_DIR}\"\n\ndist=(\"$FULL_PRODUCT_NAME\")\ndist+=(\"voltageshift\")\nif [ -d \"$DWARF_DSYM_FILE_NAME\" ]; then dist+=(\"$DWARF_DSYM_FILE_NAME\"); fi\n\narchive=\"${PRODUCT_NAME}-${MODULE_VERSION}-$(echo $CONFIGURATION | tr /a-z/ /A-Z/).zip\"\nrm -rf *.zip\n\nstrip -S \"${EXECUTABLE_PATH}\"\nif [ \"$CONFIGURATION\" == \"Release\" ]; then\n  strip -x -T \"${EXECUTABLE_PATH}\" &>/dev/null || strip -x \"${EXECUTABLE_PATH}\"\nfi\nzip -qry -FS \"${archive}\" \"${dist[@]}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AB1B031017E25FC000DD337E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -258,6 +291,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CDD8F8262AD8E97B00B38A69 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AB1B031317E25FC000DD337E /* voltageshift */;
+			targetProxy = CDD8F8252AD8E97B00B38A69 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		ABC74F0617983B9900B182E7 /* InfoPlist.strings */ = {

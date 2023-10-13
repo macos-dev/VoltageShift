@@ -123,7 +123,7 @@ void printBits(size_t const size, void const *const ptr)
     unsigned long int i, j;
     printf("(");
 
-    for (i = size-1; i >= 0; i--) {
+    for (i = size - 1; i >= 0; i--) {
         for (j = 7; j >= 0; j--) {
             byte = (b[i] >> j) & 1;
             printf("%u", byte);
