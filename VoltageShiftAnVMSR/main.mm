@@ -214,13 +214,7 @@ int writeOCMailBox(int domain, int offset)
     in.msr = (UInt32)MSR_OC_MAILBOX;
     in.action = AnVMSRActionMethodWRMSR;
     in.param = value;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodWRMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodWRMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("CPU OC mailbox write failed\n");
         return 0;
@@ -248,13 +242,7 @@ int readOCMailBox(int domain)
     in.msr = (UInt32)MSR_OC_MAILBOX;
     in.action = AnVMSRActionMethodWRMSR;
     in.param = value;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodWRMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodWRMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("CPU OC mailbox write failed\n");
         return 0;
@@ -264,13 +252,7 @@ int readOCMailBox(int domain)
         in.msr = MSR_OC_MAILBOX;
         in.action = AnVMSRActionMethodRDMSR;
         in.param = 0;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read voltage 0x00e7\n");
         }
@@ -317,13 +299,7 @@ int showcpuinfo()
 
     if (p1power == 0) {
         in.msr = 0x610;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x0610");
             return (1);
@@ -334,13 +310,7 @@ int showcpuinfo()
 
     if (turbodisable == false) {
         in.msr = 0x1a0;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x01a0");
             return (1);
@@ -350,13 +320,7 @@ int showcpuinfo()
 
     if (oclocked == false) {
         in.msr = 0x194;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x0194");
             return (1);
@@ -366,13 +330,7 @@ int showcpuinfo()
 
     if (basefreq == 0) {
         in.msr = 0xce;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x00ce");
             return (1);
@@ -384,13 +342,7 @@ int showcpuinfo()
         in.msr = 0x606;
         in.action = AnVMSRActionMethodRDMSR;
         in.param = 0;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x0606");
             return (1);
@@ -402,13 +354,7 @@ int showcpuinfo()
         in.msr = 0x1AD;
         in.action = AnVMSRActionMethodRDMSR;
         in.param = 0;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x01ad");
             return (1);
@@ -419,7 +365,6 @@ int showcpuinfo()
         fourthturbofreq = (double)(out.param >> 24 & 0xff) * 100.0;
         sixthturbofreq = (double)(out.param >> 40 & 0xff) * 100.0;
         eightthturbofreq = (double)(out.param >> 56 & 0xff) * 100.0;
-
         if (eightthturbofreq != 0) {
             printf("CPU BaseFreq: %.0f, CPU MaxFreq(1/2/4/6/8): %.0f/%.0f/%.0f/%.0f/%.0f (mhz)\n", basefreq, maxturbofreq, multturbofreq, fourthturbofreq, sixthturbofreq, eightthturbofreq);
         }
@@ -436,13 +381,7 @@ int showcpuinfo()
     in.msr = 0x611;
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodRDMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't read 0x0611");
         return (1);
@@ -453,13 +392,7 @@ int showcpuinfo()
     in.msr = 0x639;
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodRDMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't read 0x0639");
         return (1);
@@ -479,13 +412,7 @@ int showcpuinfo()
     in.msr = 0x611;
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodRDMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't read power 0x0611");
         return (1);
@@ -496,13 +423,7 @@ int showcpuinfo()
     in.msr = 0x639;
     in.action = AnVMSRActionMethodRDMSR;
     in.param = 0;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodRDMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't read 0x0639");
         return (1);
@@ -511,13 +432,7 @@ int showcpuinfo()
     powercore =  power_units * ((double)out.param - lastpowercore) / second;
 
     in.msr = 0x198;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodRDMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't read voltage 0x0198\n");
         return (1);
@@ -530,13 +445,7 @@ int showcpuinfo()
 
     if (dtsmax == 0) {
         in.msr = 0x1A2;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read voltage 0x01A2\n");
             return (1);
@@ -546,13 +455,7 @@ int showcpuinfo()
     }
 
     in.msr = 0x19C;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodRDMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't read voltage 0x019C\n");
         return (1);
@@ -585,13 +488,7 @@ int setPower(int argc, int p1, int p2)
 
     if (p1power == 0) {
         in.msr = 0x610;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x0610");
             return (1);
@@ -623,13 +520,7 @@ int setPower(int argc, int p1, int p2)
 
     in.action = AnVMSRActionMethodWRMSR;
     in.param = out.param;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodWRMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodWRMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't connect to StructMethod to send commands\n");
     }
@@ -671,13 +562,7 @@ int setTurbo(int argc, bool enable)
 
     if (turbodisabled == false) {
         in.msr = 0x1a0;
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't read 0x01a0");
             return (1);
@@ -700,13 +585,7 @@ int setTurbo(int argc, bool enable)
 
     in.action = AnVMSRActionMethodWRMSR;
     in.param = out.param;
-    ret = IOConnectCallStructMethod(connect,
-                                    AnVMSRActionMethodWRMSR,
-                                    &in,
-                                    sizeof(in),
-                                    &out,
-                                    &outsize
-                                    );
+    ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodWRMSR, &in, sizeof(in), &out, &outsize);
     if (ret != KERN_SUCCESS) {
         printf("Can't connect to StructMethod to send commands\n");
     }
@@ -1139,7 +1018,7 @@ void intHandler(int sig)
 {
     char c;
     signal(sig, SIG_IGN);
-    printf("\n quit? [y/n]");
+    printf("\n quit? [y/n] ");
     c = getchar();
     if (c == 'y' || c == 'Y') {
         unloadkext();
@@ -1363,20 +1242,9 @@ int main(int argc, const char *argv[])
         in.param = 0;
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-        ret = IOConnectMethodStructureIStructureO(connect,
-                                                  AnVMSRActionMethodRDMSR,
-                                                  sizeof(in), /* structureInputSize */
-                                                  &outsize, /* structureOutputSize */
-                                                  &in, /* inputStructure */
-                                                  &out); /* ouputStructure */
+        ret = IOConnectMethodStructureIStructureO(connect, AnVMSRActionMethodRDMSR, sizeof(in), &outsize, &in, &out);
 #else
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodRDMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodRDMSR, &in, sizeof(in), &out, &outsize);
 #endif /* MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4 */
 
         if (ret != KERN_SUCCESS) {
@@ -1399,13 +1267,7 @@ int main(int argc, const char *argv[])
         in.msr = (UInt32)hex2int(msr);
         in.action = AnVMSRActionMethodWRMSR;
         in.param = hex2int(regvalue);
-        ret = IOConnectCallStructMethod(connect,
-                                        AnVMSRActionMethodWRMSR,
-                                        &in,
-                                        sizeof(in),
-                                        &out,
-                                        &outsize
-                                        );
+        ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodWRMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't connect to StructMethod to send commands\n");
         }
