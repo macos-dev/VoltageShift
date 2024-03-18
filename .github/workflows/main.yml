@@ -26,8 +26,10 @@ jobs:
         run: |
           src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
 
-      - run: xcodebuild -scheme VoltageShift voltageshift -derivedDataPath . -configuration Debug -arch x86_64
-      - run: xcodebuild -scheme VoltageShift voltageshift -derivedDataPath . -configuration Release -arch x86_64
+      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Debug -arch x86_64
+      - run: xcodebuild -scheme voltageshift -derivedDataPath . -configuration Debug -arch x86_64
+      - run: xcodebuild -scheme VoltageShift -derivedDataPath . -configuration Release -arch x86_64
+      - run: xcodebuild -scheme voltageshift -derivedDataPath . -configuration Release -arch x86_64
 
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v4
