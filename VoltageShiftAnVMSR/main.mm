@@ -100,15 +100,15 @@ void usage(const char *name)
     printf("Copyright (C) 2020 SC Lee\n");
     printf("------------------------------------------------------------------------\n");
     printf("Usage:\n");
-    printf("Set voltage:\n   %s offset <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O>\n", name);
-    printf("Set boot and auto apply:\n   sudo %s buildlaunchd <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O> <turbo> <pl1> <pl2> <remain> <UpdateMins (0 only apply at bootup)>\n", name);
-    printf("Remove boot and auto apply:\n   %s removelaunchd\n", name);
-    printf("Get info of current setting:\n   %s info\n", name);
-    printf("Continuous monitor of CPU:\n   %s mon\n", name);
-    printf("Set Power Limit: %s power <PL1> <PL2>\n", name);
-    printf("Set Turbo Enabled: %s turbo <0/1>\n", name);
-    printf("Read MSR: %s read <HEX_MSR>\n", name);
-    printf("Write MSR: %s write <HEX_MSR> <HEX_VALUE>\n", name);
+    printf("Set voltage:\n   %s offset <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O>\n\n", name);
+    printf("Set boot and auto apply:\n   sudo %s buildlaunchd <CPU> <GPU> <CPUCache> <SA> <AI/O> <DI/O> <turbo> <pl1> <pl2> <remain> <UpdateMins (0 only apply at bootup)>\n\n", name);
+    printf("Remove boot and auto apply:\n   %s removelaunchd\n\n", name);
+    printf("Get info of current setting:\n   %s info\n\n", name);
+    printf("Continuous monitor of CPU:\n   %s mon\n\n", name);
+    printf("Set Power Limit: %s power <PL1> <PL2>\n\n", name);
+    printf("Set Turbo Enabled: %s turbo <0/1>\n\n", name);
+    printf("Read MSR: %s read <HEX_MSR>\n\n", name);
+    printf("Write MSR: %s write <HEX_MSR> <HEX_VALUE>\n\n", name);
 }
 
 unsigned long long hex2int(const char *s)
