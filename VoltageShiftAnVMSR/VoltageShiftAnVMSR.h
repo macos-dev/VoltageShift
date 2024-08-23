@@ -17,6 +17,7 @@
 #include <IOKit/IOService.h>
 #include <IOKit/IOUserClient.h>
 #include <IOKit/IOBufferMemoryDescriptor.h>
+#include <IOKit/IOMemoryDescriptor.h>
 #include <libkern/libkern.h>
 
 #if TARGET_CPU_X86_64
@@ -33,6 +34,7 @@ enum
 {
     AnVMSRActionMethodRDMSR = 0,
     AnVMSRActionMethodWRMSR = 1,
+    AnVMSRActionMethodPrepareMap = 2,
     AnVMSRNumMethods
 };
 
@@ -42,6 +44,11 @@ typedef struct
     UInt32 msr;
     UInt64 param;
 } inout;
+
+typedef struct {
+    UInt64 addr;
+    UInt64 size;
+} map_t;
 
 class AnVMSRUserClient;
 
@@ -94,8 +101,10 @@ public:
     virtual IOReturn clientMemoryForType(UInt32 type, IOOptionBits *options, IOMemoryDescriptor **memory) override;
     virtual IOReturn actionMethodRDMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize);
     virtual IOReturn actionMethodWRMSR(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize);
+    virtual IOReturn actionMethodPrepareMap(UInt32 *dataIn, UInt32 *dataOut, IOByteCount inputSize, IOByteCount *outputSize);
 
     task_t fTask;
     // Remove IODataQueue because of security issue recommend by Apple
     int Q_Err;
+    UInt64 LastMapAddr, LastMapSize;
 };

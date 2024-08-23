@@ -19,6 +19,10 @@
 #define OFFSET_TEMP 0
 // #define DEBUG 1
 
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void *)-1)
+#endif
+
 #define kAnVMSRClassName "VoltageShiftAnVMSR"
 
 #define MSR_OC_MAILBOX 0x150
@@ -51,6 +55,7 @@ enum
 {
     AnVMSRActionMethodRDMSR = 0,
     AnVMSRActionMethodWRMSR = 1,
+    AnVMSRActionMethodPrepareMap = 2,
     AnVMSRNumMethods
 };
 
@@ -60,6 +65,11 @@ typedef struct
     UInt32 msr;
     UInt64 param;
 } inout;
+
+typedef struct {
+    UInt64 addr;
+    UInt64 size;
+} map_t;
 
 io_service_t getService()
 {
@@ -93,6 +103,117 @@ failure:
     return service;
 }
 
+void *map_physical(uint64_t phys_addr, size_t len)
+{
+    kern_return_t err;
+#if __LP64__
+    mach_vm_address_t addr;
+    mach_vm_size_t size;
+#else
+    vm_address_t addr;
+    vm_size_t size;
+#endif
+    size_t dataInLen = sizeof(map_t);
+    size_t dataOutLen = sizeof(map_t);
+    map_t in, out;
+
+    in.addr = phys_addr;
+    in.size = len;
+
+#ifdef DEBUG
+    printf("map_phys: phys %08llx, %08zx\n", phys_addr, len);
+#endif
+
+#if !defined(__LP64__) && defined(WANT_OLD_API)
+    /* Check if OSX 10.5 API is available */
+    if (IOConnectCallStructMethod != NULL) {
+#endif
+        err = IOConnectCallStructMethod(connect, AnVMSRActionMethodPrepareMap, &in, dataInLen, &out, &dataOutLen);
+#if !defined(__LP64__) && defined(WANT_OLD_API)
+    } else {
+        /* Use old API */
+        err = IOConnectMethodStructureIStructureO(connect, kPrepareMap, dataInLen, &dataOutLen, &in, &out);
+    }
+#endif
+
+    if (err != KERN_SUCCESS) {
+        printf("\nError(kPrepareMap): system 0x%x subsystem 0x%x code 0x%x ",
+               err_get_system(err), err_get_sub(err), err_get_code(err));
+
+        printf("physical 0x%08llx[0x%x]\n", phys_addr, (unsigned int)len);
+
+        switch (err_get_code(err)) {
+            case 0x2c2: printf("Invalid argument.\n"); errno = EINVAL; break;
+            case 0x2cd: printf("Device not open.\n"); errno = ENOENT; break;
+        }
+
+        return MAP_FAILED;
+    }
+
+    err = IOConnectMapMemory(connect, 0, mach_task_self(),
+                             &addr, &size, kIOMapAnywhere | kIOMapInhibitCache);
+
+    /* Now this is odd; The above connect seems to be unfinished at the
+     * time the function returns. So wait a little bit, or the calling
+     * program will just segfault. Bummer. Who knows a better solution?
+     */
+    usleep(1000);
+
+    if (err != KERN_SUCCESS) {
+        printf("\nError(IOConnectMapMemory): system 0x%x subsystem 0x%x code 0x%x ",
+               err_get_system(err), err_get_sub(err), err_get_code(err));
+
+        printf("physical 0x%08llx[0x%x]\n", phys_addr, (unsigned int)len);
+
+        switch (err_get_code(err)) {
+            case 0x2c2: printf("Invalid argument.\n"); errno = EINVAL; break;
+            case 0x2cd: printf("Device not open.\n"); errno = ENOENT; break;
+        }
+
+        return MAP_FAILED;
+    }
+
+#ifdef DEBUG
+    printf("map_phys: virt %08llx, %08llx\n", addr, size);
+#endif
+
+    return (void *)addr;
+}
+
+void unmap_physical(void *virt_addr __attribute__((unused)), size_t len __attribute__((unused)))
+{
+    // Nut'n Honey
+}
+
+int access_direct_memory(uintptr_t addr, uint32_t *value, bool write) {
+    // align to a page boundary
+    const uintptr_t page_mask = 0xFFF;
+    const size_t len = 4;
+    const uintptr_t page_offset = addr & page_mask;
+    const uintptr_t map_addr = addr & ~page_mask;
+    const size_t map_len = (len + page_offset + page_mask) & ~page_mask;
+
+    volatile uint8_t * const map_buf = (uint8_t *) map_physical(map_addr, map_len);
+    if (map_buf == NULL)
+    {
+        printf("Map memory %08lx failed.", addr);
+        return -1;
+    }
+    volatile uint8_t * const buf = map_buf + page_offset;
+
+    if (!write) {
+        *value = buf[0] | buf[1] << 8 | buf[2] << 16 | buf[3] << 24;
+    } else {
+        buf[0] = (uint8_t) ((*value) & 0xFF);
+        buf[1] = (uint8_t) (((*value) >> 8) & 0xFF);
+        buf[2] = (uint8_t) (((*value) >> 16) & 0xFF);
+        buf[3] = (uint8_t) (((*value) >> 24) & 0xFF);
+    }
+    //unmap_physical(map_addr, map_len);
+
+    return 0;
+}
+
 void usage(const char *name)
 {
     printf("------------------------------------------------------------------------\n");
@@ -109,6 +230,8 @@ void usage(const char *name)
     printf("Set Turbo Enabled: %s turbo <0/1>\n\n", name);
     printf("Read MSR: %s read <HEX_MSR>\n\n", name);
     printf("Write MSR: %s write <HEX_MSR> <HEX_VALUE>\n\n", name);
+    printf("Read memory: %s rdmem <HEX_ADDR>\n\n", name);
+    printf("Write memory: %s wrmem <HEX_ADDR> <HEX_VALUE>\n\n", name);
 }
 
 unsigned long long hex2int(const char *s)
@@ -1270,6 +1393,34 @@ int main(int argc, const char *argv[])
         ret = IOConnectCallStructMethod(connect, AnVMSRActionMethodWRMSR, &in, sizeof(in), &out, &outsize);
         if (ret != KERN_SUCCESS) {
             printf("Can't connect to StructMethod to send commands\n");
+        }
+    }
+    else if (!strncmp(parameter, "rdmem", 5)) {
+        UInt32 addr = (UInt32)hex2int(msr);
+        uint32_t value = 0;
+        if (access_direct_memory(addr, &value, false) != 0) {
+            printf("read direct memory %x failed", addr);
+        } else {
+            printf("RDMEM %x returns value 0x%x\n", addr, value);
+        }
+    }
+    else if (!strncmp(parameter, "wrmem", 5)) {
+        if (argc < 4)
+        {
+            usage(argv[0]);
+            return(1);
+        }
+
+        regvalue = (char *)argv[3];
+
+        UInt32 addr = (UInt32)hex2int(msr);
+        uint32_t value = (uint32_t)hex2int(regvalue);
+
+        if (access_direct_memory(addr, &value, true) != 0) {
+            printf("write direct memory %x with %x failed", addr, value);
+        } else {
+            access_direct_memory(addr, &value, false);
+            printf("WRMEM %x returns value 0x%x\n", addr, value);
         }
     }
     else {
